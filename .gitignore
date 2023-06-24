@@ -12,4 +12,6 @@ media/**
 include/**
 Lib/**
 .env
+.idea/
+.vscode/
 ```

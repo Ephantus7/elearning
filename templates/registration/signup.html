@@ -1,0 +1,118 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}
+    Registration | E-Learning Platform
+{% endblock title %}
+
+{% block content %}
+     <!-- ======= Header ======= -->
+      <header id="header" class="header fixed-top d-flex align-items-center">
+
+        <div class="d-flex align-items-center justify-content-between">
+          <a href="{% url 'home' %}" class="logo d-flex align-items-center">
+            <img src="{% static 'assets/img/favicon.jpg' %}" alt="">
+            <span class="d-none d-lg-block">E-Learning Platform</span>
+          </a>
+          <i class="bi bi-list toggle-sidebar-btn"></i>
+        </div><!-- End Logo -->
+
+      </header><!-- End Header -->
+
+      <!-- ======= Sidebar ======= -->
+      <aside id="sidebar" class="sidebar">
+
+        <ul class="sidebar-nav" id="sidebar-nav">
+
+          <li class="nav-item">
+            <a class="nav-link collapsed" href="{% url 'signup' %}">
+              <i class="bi bi-card-list"></i>
+              <span>Register</span>
+            </a>
+          </li><!-- End Register Page Nav -->
+
+          <li class="nav-item">
+            <a class="nav-link collapsed" href="{% url 'login' %}">
+              <i class="bi bi-box-arrow-in-right"></i>
+              <span>Login</span>
+            </a>
+          </li><!-- End Login Page Nav -->
+
+
+        </ul>
+
+      </aside><!-- End Sidebar-->
+      <main id="main" class="main">
+
+        <div class="pagetitle">
+          <h1>Registration Contact</h1>
+          <nav>
+            <ol class="breadcrumb">
+              <li class="breadcrumb-item"><a href="{% url 'student_home' %}">Home</a></li>
+              <li class="breadcrumb-item active">Signup</li>
+            </ol>
+          </nav>
+        </div><!-- End Page Title -->
+
+        <section class="section">
+          <div class="row align-items-top">
+            <div class="col-lg-12">
+                <div class="card recent-sales overflow-auto">
+                    <div class="card-header">
+                        <h5 class="card-title">Registration</h5>
+                    </div>
+
+                    <br>
+                    <div class="card-body">
+                        Sorry. We currently do no allow self registration.
+                        Please contact your administrator to create an account for you.
+                    </div>
+
+                </div>
+             </div>
+
+             <div class="col-xl-6">
+
+              <div class="row">
+                <div class="col-lg-6">
+                  <div class="info-box card">
+                    <br>
+                    <div class="card-body" align="center">
+                        <i class="bi bi-telephone"></i>
+                        <h3>Call Us</h3>
+                        <p><a href="tel:+254712345678">+254712345678</a></p>
+                    </div>
+                  </div>
+                </div>
+
+                <div class="col-lg-6">
+                  <div class="info-box card">
+                    <br>
+                    <div class="card-body" align="center">
+                        <i class="bi bi-envelope"></i>
+                        <h3>Email Us</h3>
+                        <p><a href="mailto:admin@gmail.com">admin@gmail.com</a></p>
+                    </div>
+                  </div>
+                </div>
+
+                <div class="col-lg-6">
+                  <div class="info-box card">
+                    <br>
+                    <div class="card-body" align="center">
+                        <i class="bi bi-clock"></i>
+                        <h3>Open Hours</h3>
+                        <p>Monday - Friday<br>9:00AM - 05:00PM</p>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+            </div>
+          </div>
+        </section>
+
+      </main><!-- End #main -->
+
+      <a href="#" class="back-to-top d-flex align-items-center justify-content-center"><i class="bi bi-arrow-up-short"></i></a>
+{% endblock %}

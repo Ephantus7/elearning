@@ -1,0 +1,157 @@
+{% extends 'teachers/teacher_base.html' %}
+{% load static %}
+{% load embed_video_tags %}
+
+{% block title %}
+    Videos | E-Learning Platform
+{% endblock title %}
+
+{% block content %}
+  <main id="main" class="main">
+        <div class="pagetitle">
+          <h1>Video Tutorials</h1>
+          <nav>
+            <ol class="breadcrumb">
+              <li class="breadcrumb-item"><a href="{% url 'student_home' %}">Home</a></li>
+              <li class="breadcrumb-item active">Videos</li>
+            </ol>
+          </nav>
+        </div><!-- End Page Title -->
+
+        <section class="section">
+          <div class="row align-items-top">
+            {% if messages %}
+              {% for message in messages %}
+                <div class="col-lg-12">
+                  <div class="alert alert-{{ message.tags }}">
+                    {% if message.SUCCESS %}
+                      <i class="bi bi-check-circle me-1"></i>
+                    {% elif message.ERROR %}
+                      <i class="bi bi-exclamation-octagon me-1"></i>
+                    {% endif %}
+                    {{ message }}
+                  </div>
+                </div>
+              {% endfor %}
+            {% endif %}
+
+            <div class="col-lg-12">
+              <div class="card">
+                <div class="card-body">
+                  <h5 class="card-title">Add Video</h5>
+                  <p>Click the button below to add a new book</p>
+
+                  <!-- New Video Modal -->
+                  <button type="button" class="btn btn-outline-primary" data-bs-toggle="modal" data-bs-target="#disablebackdrop">
+                  New Video
+                  </button>
+                  <div class="modal fade" id="disablebackdrop" tabindex="-1" data-bs-backdrop="false">
+                    <div class="modal-dialog modal-dialog-scrollable modal-lg">
+                      <div class="modal-content">
+                      <div class="modal-header">
+                        <h5 class="modal-title" >New Video</h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                      </div>
+                      <div class="modal-body">
+                <form method="POST" enctype="multipart/form-data" class="needs-validation" novalidate>
+                  {% csrf_token %}
+
+                  <div class="row mb-3">
+                    <label class="col-sm-2 col-form-label">Video Course</label>
+                    <div class="col-sm-10">
+                      {{ form.course }}
+                      <div class="valid-feedback"> Looks good! </div>
+                      <div class="invalid-feedback"> Please choose a Course. </div>
+                    </div>
+                  </div>
+
+                  <div class="row mb-3">
+                    <label class="col-sm-2 col-form-label">Video Subject</label>
+                    <div class="col-sm-10">
+                      {{ form.subject }}
+                      <div class="valid-feedback"> Looks good! </div>
+                      <div class="invalid-feedback"> Please choose a Subject. </div>
+                    </div>
+                  </div>
+
+                  <div class="row mb-3">
+                    <label for="inputText" class="col-sm-2 col-form-label">Video Title</label>
+                    <div class="col-sm-10">
+                      {{ form.video_title }}
+                      <div class="valid-feedback"> Looks good! </div>
+                      <div class="invalid-feedback"> Please choose a Title. </div>
+                    </div>
+                  </div>
+
+                  <div class="row mb-3">
+                    <label for="inputNumber" class="col-sm-2 col-form-label">Video Description</label>
+                    <div class="col-sm-10">
+                      {{ form.video_description }}
+                      <div class="valid-feedback"> Looks good! </div>
+                      <div class="invalid-feedback"> Please choose a Description. </div>
+                    </div>
+                  </div>
+
+                  <div class="row mb-3">
+                    <label for="inputNumber" class="col-sm-2 col-form-label">Video URL</label>
+                    <div class="col-sm-10">
+                      {{ form.video }}
+                      <div class="valid-feedback"> Looks good! </div>
+                      <div class="invalid-feedback"> Please choose a Video URL. </div>
+                    </div>
+                  </div>
+
+                  <div class="row mb-3">
+                    <label class="col-sm-2 col-form-label">Submit</label>
+                    <div class="col-sm-10">
+                      <button type="submit" class="btn btn-primary">Add Video</button>
+                    </div>
+                  </div>
+                </form>
+
+              <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+              </div>
+                </div>
+              </div>
+            </div><!-- End New video Modal-->
+
+            </div>
+          </div>
+        </div>
+        {% if videos|length == 0 %}
+            <div class="col-lg-12">
+              <div class="alert alert-warning" role="alert">
+                No videos available. Contact your Administrator.
+              </div>
+            </div>
+          {% endif %} 
+
+          <div class="row">
+
+            {% for video in videos %}
+
+                <!-- Card with titles, buttons, and links -->
+                <div class="col-lg-6">
+                    <div class="card">
+                      <div class="card-body">
+                        <h5 class="card-title">{{ video.video_title }}</h5>
+                        {% video video.video 'tiny' %}
+                        <p class="card-text">{{ video.video_description }}</p>
+                        <p class="card-text"><a href="{{ video.url }}" class="btn btn-primary">Play on Youtube</a></p>
+                      </div>
+                    </div><!-- End Card with titles, buttons, and links -->
+                  </div>
+
+            {% endfor %}
+
+          </div>
+        </div>
+
+      </div>
+    </section>
+
+  </main><!-- End #main -->
+
+      <a href="#" class="back-to-top d-flex align-items-center justify-content-center"><i class="bi bi-arrow-up-short"></i></a>
+{% endblock %}

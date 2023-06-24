@@ -1,0 +1,70 @@
+{% extends base_template %}
+{% load static %}
+
+{% block title %}
+    All Courses | E-Learning Platform
+{% endblock title %}
+
+{% block content %}
+  <main id="main" class="main">
+
+    <div class="pagetitle">
+      <h1>Course Details</h1>
+      <nav>
+        <ol class="breadcrumb">
+          <li class="breadcrumb-item"><a href="{% url 'dashboard' %}">Home</a></li>
+          <li class="breadcrumb-item"><a href="{% url 'courses' %}">Courses</a></li>
+          <li class="breadcrumb-item active">{{ course.course_name|truncatechars:30 }}</li>
+        </ol>
+      </nav>
+    </div><!-- End Page Title -->
+
+    <section class="section dashboard">
+       <div class="row">
+        <!-- start columns -->
+        <div class="col-lg-12">
+          <div class="row">
+            <!-- Recent Sales -->
+            <div class="col-12">
+                <div class="card recent-sales overflow-auto">
+                  <div class="card-body">
+                    <h5 class="card-title">Subjects <span>| {{ course.course_name|truncatechars:30 }}</span></h5>
+                    
+                    <table class="table table-borderless">
+                      <thead>
+                        <tr>
+                          <th scope="col">#</th>
+                          <th scope="col">Subject Code</th>
+                          <th scope="col">Subject Name</th>
+                          <th scope="col">Subject Description</th>
+                          <th scope="col">Module</th>
+                        </tr>
+                      </thead>
+                    {% for subject in subjects %}
+                      <!-- subjects -->
+                        <tbody>
+                              <tr>
+                                <td scope="row">{{ forloop.counter }}</td>
+                                <td>{{ subject.subject_code }}</td>
+                                <td><a href="#" class="text-primary">{{ subject.subject_name }}</a></td>
+                                <td>{{ subject.subject_description }}</td>
+                                <td>{{ subject.module }}</td>
+                              </tr>
+                        </tbody>
+                        <!-- end subjects -->
+                    {% endfor %}
+                    </table>
+                  </div>
+  
+                </div>
+              </div><!-- End Recent Sales -->
+  
+          </div>
+        </div><!-- End  columns -->
+
+      </div><!-- End row -->
+    </section>
+
+  </main><!-- End #main -->
+
+{% endblock %}

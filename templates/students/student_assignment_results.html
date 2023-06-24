@@ -1,0 +1,149 @@
+{% extends 'students/student_base.html' %}
+{% load static %}
+
+{% block title %}
+    Assignment Results | E-Learning Platform
+{% endblock title %}
+
+{% block content %}
+      <main id="main" class="main">
+
+        <div class="pagetitle">
+          <h1>Assignment Results</h1>
+          <nav>
+            <ol class="breadcrumb">
+              <li class="breadcrumb-item"><a href="{% url 'student_home' %}">Home</a></li>
+              <li class="breadcrumb-item active">Assignment Results</li>
+            </ol>
+          </nav>
+        </div><!-- End Page Title -->
+
+        <section class="section">
+          <div class="row align-items-top">
+              <!-- Assignment Results -->
+            <div class="col-12">
+              <div class="card recent-sales overflow-auto">
+
+                <div class="card-body">
+                  <h5 class="card-title"><span>Assignment Results</span></h5>
+
+                {% if scores|length == 0 %}
+                    <div class="col-lg-12">
+                      <div class="alert alert-warning" role="alert">
+                        No assignments have been graded yet. Please check back later.
+                      </div>
+                    </div>
+                {% else %}
+                  <table class="table table-border">
+                    <thead>
+                      <tr>
+                        <th scope="col">#</th>
+                        <th scope="col">Subject</th>
+                        <th scope="col">Assignment</th>
+                        <th scope="col">Lecturer</th>
+                        <th scope="col">Score</th>
+                      </tr>
+                    </thead>
+                    {% for score in scores %}
+                        <tbody>
+                          <tr>
+                            <th scope="row"><a href="#">{{ forloop.counter }}</a></th>
+                            <td><a href="#" class="text-primary">{{ score.assignment.subject }}</a></td>
+                            <td><a href="#" class="text-primary">{{ score.assignment.assignment_name }}</a></td>
+                            <td>{{ score.assignment.created_by }}</td>
+                            {% if score.score >= 90 %}
+                              <td><span class="badge bg-success">{{ score.score }}</span></td>
+                            {% elif score.score < 90 and score.score >= 50 %}
+                              <td><span class="badge bg-primary">{{ score.score }}</span></td>
+                            {% elif score.score < 50 and score.score >= 30 %}
+                              <td><span class="badge bg-warning">{{ score.score }}</span></td>
+                            {% else %}
+                              <td><span class="badge bg-danger">{{ score.score }}</span></td>
+                            {% endif %}
+                          </tr>
+                        </tbody>
+                    {% endfor %}
+                  </table>
+                {% endif %}
+                </div>
+
+              </div>
+            </div><!-- End assignments table -->
+
+           <!-- Reports -->
+            <div class="col-12">
+              <div class="card">
+                <div class="card-body">
+                  <h5 class="card-title">Reports <span>/ Assignments</span></h5>
+
+                  <!-- Line Chart -->
+                  <div id="reportsChart"></div>
+
+                  <script>
+                    document.addEventListener("DOMContentLoaded", () => {
+                      new ApexCharts(document.querySelector("#reportsChart"), {
+                       series: [
+                            {% for score in scores %}
+                                {
+                                  name: '{{ score.assignment.assignment_name }}',
+                                  data: [
+                                      {{ score.score }}
+                                  ],
+                                },
+                            {% endfor %}
+                        ],
+                        chart: {
+                          height: 350,
+                          type: 'area',
+                          toolbar: {
+                            show: false
+                          },
+                        },
+                        markers: {
+                          size: 4
+                        },
+                        colors: ['#4154f1', '#2eca6a', '#ff771d'],
+                        fill: {
+                          type: "gradient",
+                          gradient: {
+                            shadeIntensity: 1,
+                            opacityFrom: 0.3,
+                            opacityTo: 0.4,
+                            stops: [10, 50, 100]
+                          }
+                        },
+                        dataLabels: {
+                          enabled: false
+                        },
+                        stroke: {
+                          curve: 'smooth',
+                          width: 3
+                        },
+                        xaxis: {
+                          type: 'text',
+                          categories: [
+                              {% for category in categories %}
+                                "{{ category.category_name }}",
+                              {% endfor %}
+                          ]
+                        },
+                      }).render();
+                    });
+                  </script>
+                  <!-- End Line Chart -->
+
+                </div>
+
+              </div>
+            </div><!-- End Reports -->
+
+
+          </div>
+        </section>
+
+      </main><!-- End #main -->
+
+      <a href="#" class="back-to-top d-flex align-items-center justify-content-center">
+        <i class="bi bi-arrow-up-short"></i>
+      </a>
+{% endblock %}

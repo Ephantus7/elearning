@@ -1,0 +1,61 @@
+{% extends 'django_messages/base.html' %}
+{% load i18n %}
+
+{% block content %}
+    
+  <main id="main" class="main">
+
+    <div class="pagetitle">
+      <h1>Compose</h1>
+      <nav>
+        <ol class="breadcrumb">
+          <li class="breadcrumb-item"><a href="{% url 'profile' %}">Home</a></li>
+          <li class="breadcrumb-item active">New</li>
+        </ol>
+      </nav>
+    </div><!-- End Page Title -->
+
+    <section class="section">
+      <div class="row">
+
+        <div class="col-lg-12">
+          <div class="card">
+            <div class="card-body">
+              <h5 class="card-title">New Message</h5>
+
+              <form action="" method="post">
+                {% csrf_token %}
+                <div class="row gy-4">
+    
+                  <div class="col-md-6">
+                    {{ form.recipient }}
+                  </div>
+  
+                  <div class="col-md-6 ">
+                    <input type="email" class="form-control" name="email" placeholder="Your Email" required>
+                  </div>
+  
+                  <div class="col-md-12">
+                    {{ form.subject }}
+                  </div>
+  
+                  <div class="col-md-12">
+                    {{ form.body }}
+                  </div>
+  
+                  <div class="col-md-12 text-center">
+                    <button type="submit" class="btn btn-primary" value="{% trans "Send" %} &raquo;">Send Message</button>
+                  </div>
+  
+                </div>
+              </form>
+
+            </div>
+          </div>
+
+        </div>
+      </div>
+    </section>
+
+  </main><!-- End #main -->
+{% endblock %}

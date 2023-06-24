@@ -1,0 +1,288 @@
+{% extends "students/student_base.html" %}
+{% load i18n %}
+
+{% load quiz_tags %}
+
+{% block title %} Progress Page | E-Learning Platform {% endblock %}
+{% block description %} User Progress Page {% endblock %}
+
+{% load static %}
+
+{% block content %}
+	<main id="main" class="main">
+
+        <div class="pagetitle">
+          <h1>Exams Results</h1>
+          <nav>
+            <ol class="breadcrumb">
+              <li class="breadcrumb-item"><a href="{% url 'dashboard' %}">Home</a></li>
+              <li class="breadcrumb-item active">Exams Results</li>
+            </ol>
+          </nav>
+        </div><!-- End Page Title -->
+
+        <section class="section">
+          <div class="row align-items-top">
+            <div class="col-lg-12">
+              <div class="row">
+                 <div class="card">
+
+                    {% if cat_scores %}
+                    <div class="card recent-sales overflow-auto">
+                        <div class="card-header">
+                             <h5 class="card-title">Category Scores</h5>
+                        </div>
+
+                        <div class="card-body">
+
+                                <p class="lead">
+                                    Below are the results of the categories that you have sat.
+                                </p>
+
+                                <table class="table table-bordered table-striped">
+                                    <thead>
+                                    <tr>
+                                        <th scope="col">#</th>
+                                        <th>Category</th>
+                                        <th>Correctly answered</th>
+                                        <th>Incorrect</th>
+                                        <th>%</th>
+                                    </tr>
+                                    </thead>
+                                    <tbody>
+                                        {% for cat, value in cat_scores.items %}
+                                            <tr>
+                                                <th scope="row">{{ forloop.counter }}</th>
+                                                <td>{{ cat }}</td>
+                                                <td>{{ value.0 }}</td>
+                                                <td>{{ value.1 }}</td>
+                                                <td>{{ value.2 }}</td>
+                                            </tr>
+                                        {% endfor %}
+                                    </tbody>
+                                </table>
+                                <div class="card">
+                                    <div class="card-titel">
+                                        <h5 class="card-title">Performance Chart</h5>
+                                    </div>
+                                </div>
+                                  <!-- Column Chart -->
+                                  <div id="columnChart"></div>
+
+                                  <script>
+                                    document.addEventListener("DOMContentLoaded", () => {
+                                      new ApexCharts(document.querySelector("#columnChart"), {
+                                          series: [{
+                                                name: 'Correct',
+                                                data: [
+                                                    {% for cat, value in cat_scores.items %}
+                                                        {{ value.0 }},
+                                                    {% endfor %}
+                                                ]
+                                            }, {
+                                                name: 'Incorrect',
+                                                data: [
+                                                    {% for cat, value in cat_scores.items %}
+                                                        {{ value.1 }},
+                                                    {% endfor %}
+                                                ]
+                                            }, {
+                                                name: 'Percentage',
+                                                data: [
+                                                    {% for cat, value in cat_scores.items %}
+                                                        {{ value.2 }},
+                                                    {% endfor %}
+                                                ]
+                                            }],
+
+                                        chart: {
+                                          type: 'bar',
+                                          height: 350
+                                        },
+                                        plotOptions: {
+                                          bar: {
+                                            horizontal: false,
+                                            columnWidth: '55%',
+                                            endingShape: 'rounded'
+                                          },
+                                        },
+                                        dataLabels: {
+                                          enabled: false
+                                        },
+                                        stroke: {
+                                          show: true,
+                                          width: 2,
+                                          colors: ['transparent']
+                                        },
+                                        xaxis: {
+                                          categories: [
+                                            {% for cat, value in cat_scores.items %}
+                                                '{{ cat }}',
+                                            {% endfor %}
+                                          ],
+                                        },
+                                        yaxis: {
+                                          title: {
+                                            text: 'Scores'
+                                          }
+                                        },
+                                        fill: {
+                                          opacity: 1
+                                        },
+                                        tooltip: {
+                                            y: {
+                                                formatter: function (val) {
+                                                return val + " "
+                                                }
+                                            }
+                                        }
+                                      }).render();
+                                    });
+                                  </script>
+                                  <!-- End Column Chart -->
+                            </div>
+                          </div>
+                        {% else %}
+                                <br>
+                                <div class="row">
+                                    <div class="col-md-12">
+                                        <div class="alert alert-danger">
+                                            <small>
+                                                You have not sat for exams in any category yet.
+                                            </small>
+                                        </div>
+                                    </div>
+                                </div>
+                        {% endif %}
+
+                        {% if exams %}
+                            <div class="card recent-sales overflow-auto">
+                                <div class="card-header">
+                                    <h5 class="card-title">Previous exam papers</h5>
+                                </div>
+
+                                <div class="card-body">
+
+                                    <p class="lead">
+                                        Below are the results of exams that you have sat.
+                                    </p>
+
+                                    <table class="table table-bordered table-striped table-responsive">
+
+                                        <thead>
+                                        <tr>
+                                            <th scope="col">#</th>
+                                            <th>Quiz Title</th>
+                                            <th>Score</th>
+                                            <th>Possible Score</th>
+                                            <th>%</th>
+                                        </tr>
+                                        </thead>
+
+                                        <tbody>
+
+                                            {% for exam in exams %}
+
+                                                <tr>
+                                                    <th scope="row">{{ forloop.counter }}</th>
+                                                    <td>{{ exam.quiz.title }}</td>
+                                                    <td>{{ exam.current_score }}</td>
+                                                    <td>{{ exam.get_max_score }}</td>
+                                                    <td>{{ exam.get_percent_correct }}</td>
+                                                </tr>
+
+                                            {% endfor %}
+
+                                        </tbody>
+
+                                    </table>
+                                    <div class="card">
+                                        <div class="card-title">
+                                            <h5 class="card-title">Performance Chart</h5>
+                                        </div>
+                                    </div>
+
+                                     <!-- Column Chart -->
+                                  <div id="examColumnChart"></div>
+
+                                  <script>
+                                    document.addEventListener("DOMContentLoaded", () => {
+                                        new ApexCharts(document.querySelector("#examColumnChart"), {
+                                            series: [
+
+                                            ],
+                                           chart: {
+                                              type: 'bar',
+                                              height: 350
+                                            },
+                                            plotOptions: {
+                                                bar: {
+                                                horizontal: false,
+                                                columnWidth: '55%',
+                                                endingShape: 'rounded'
+                                                },
+                                            },
+                                            dataLabels: {
+                                                enabled: false
+                                            },
+                                            stroke: {
+                                                show: true,
+                                                width: 2,
+                                                colors: ['transparent']
+                                            },
+                                            xaxis: {
+                                                categories: [
+                                                    {% for exam in exams %}
+                                                        '{{ exam.quiz.title }}',
+                                                    {% endfor %}
+                                                ],
+                                            },
+                                            yaxis: {
+                                                title: {
+                                                    text: 'Scores'
+                                                }
+                                            },
+                                            fill: {
+                                                opacity: 1
+                                            },
+                                            tooltip: {
+                                                y: {
+                                                    formatter: function (val) {
+                                                    return val + " "
+                                                    }
+                                                }
+                                            }
+                                        }).render();
+                                    });
+                                  </script>
+                                </div>
+
+                            </div>
+                        {% else %}
+                            <br>
+                            <div class="row">
+                                <div class="col-md-12">
+                                    <div class="alert alert-danger">
+                                        <small>
+                                            You have not sat any exams yet.
+                                        </small>
+                                    </div>
+                                </div>
+                            </div>
+                        {% endif %}
+
+                      </div>
+                 </div>
+              </div>
+                      
+            </div>
+        </section>
+
+      </main><!-- End #main -->
+
+      <a href="#" class="back-to-top d-flex align-items-center justify-content-center"><i class="bi bi-arrow-up-short"></i></a>
+
+{% endblock %}
+
+
+

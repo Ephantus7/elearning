@@ -1,0 +1,71 @@
+{% extends 'students/student_base.html' %}
+{% load static %}
+{% load tz %}
+
+{% block title %}
+    Past Assignments | E-Learning Platform
+{% endblock title %}
+
+{% block content %}
+      <main id="main" class="main">
+
+        <div class="pagetitle">
+          <h1>Past Assignments</h1>
+          <nav>
+            <ol class="breadcrumb">
+              <li class="breadcrumb-item"><a href="{% url 'student_home' %}">Home</a></li>
+              <li class="breadcrumb-item">Assignments</li>
+              <li class="breadcrumb-item active">Past Assignments</li>
+            </ol>
+          </nav>
+        </div><!-- End Page Title -->
+
+        <section class="section">
+          <div class="row align-items-top">
+          {% if messages %}
+            <div class="col-lg-12">
+              {% for message in messages %}
+                <div class="alert alert-{{ message.tags }}">
+                  {{ message }}
+                </div>
+              {% endfor %}
+            </div>
+            {% endif %}
+            <div class="col-lg-12">
+                {% for assignment in assignments %}
+                  {% empty %}
+                    <div class="col-lg-12">
+                      <div class="alert alert-danger" role="alert">
+                        No past assignments available. Uploaded assignments will appear here.
+                      </div>
+                    </div>
+                  {% endfor %}
+                {% for assignment in assignments %}
+                     <div class="card">
+                        <div class="card-body">
+                          <h4 class="card-title">
+                              {{ assignment.assignment_name }} | {{ assignment.subject }} |
+                              {{ assignment.course|truncatechars:40 }}
+                          </h4>
+
+                            <p class="card-text"><em>Created by: <b>{{ assignment.created_by }}</b></em></p>
+
+                          <p class="card-text">
+                              {{ assignment.description|truncatechars:70 }}
+                          </p>
+                          <p class="card-text">
+                              <a href="{{ assignment.assignment_file.url }}" class="btn btn-primary" download>
+                                  Download Assignment File
+                              </a>
+                          </p>
+                        </div>
+                    </div>
+                {% endfor %}
+            </div>
+          </div>
+        </section>
+
+      </main><!-- End #main -->
+
+      <a href="#" class="back-to-top d-flex align-items-center justify-content-center"><i class="bi bi-arrow-up-short"></i></a>
+{% endblock %}

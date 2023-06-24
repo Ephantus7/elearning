@@ -1,0 +1,91 @@
+{% extends "teachers/teacher_base.html" %}
+{% load i18n %}
+{% load quiz_tags %}
+{% block title %}
+  Result of  {{ sitting.quiz.title }}   for  {{ sitting.user }}
+{% endblock %}
+
+{% block content %}
+	<main id="main" class="main">
+
+        <div class="pagetitle">
+          <h1>Exams</h1>
+          <nav>
+            <ol class="breadcrumb">
+              <li class="breadcrumb-item"><a href="{% url 'dashboard' %}">Home</a></li>
+              <li class="breadcrumb-item active">Exams</li>
+            </ol>
+          </nav>
+        </div><!-- End Page Title -->
+
+        <section class="section">
+          <div class="row align-items-top">
+            <div class="col-lg-12">
+              <div class="card recent-sales overflow-auto">
+                <div class="card-body">
+                  <h5 class="card-title">Recently Added Exams</h5> 
+						<h2>  Quiz title : {{ sitting.quiz.title }}</h2>
+						<h3>  Category : {{ sitting.quiz.category }}</h3>
+						<p>{{ sitting.quiz.description }}</p>
+						<hr>
+						<p>  User : {{ sitting.user.first_name }} {{ sitting.user.last_name }}</p>
+						<p>  Completed : {{ sitting.end|date }}</p>
+						<p>  Score : {{ sitting.get_percent_correct }}%</p>
+
+						<table class="table table-bordered table-striped">
+
+						<thead>
+							<tr>
+							<th>  Question </th>
+							<th>  Correct Answer </th>
+							<th>User Answer</th>
+							<th>Actions</th>
+							</tr>
+						</thead>
+
+						<tbody>
+						{% for question in questions %}
+
+							<tr>
+							<td>
+								{{ question.content }}
+								{% if question.figure %}
+									<div style="max-width: 100px;"><img src="{{ question.figure.url }}" alt="{{ question.figure }}"/></div>
+								{% endif %}
+							</td>
+							<td>{{ question|answer_choice_to_string:question.user_answer }}</td>
+							<td>
+								{% if question.id in sitting.get_incorrect_questions %}
+								<p>Incorrect</p>
+								{% else %}
+								<p>Correct</p>
+								{% endif %}
+							</td>
+							<td>
+								<form action="" method="POST">{% csrf_token %}
+								<input type=hidden name="qid" value="{{ question.id }}">
+								<button type="submit" class="btn btn-warning">  Toggle whether correct </button>
+								</form>
+							</td>
+							</tr>
+
+						{% endfor %}
+
+						</tbody>
+
+						</table>
+                  </div>
+
+                </div>
+                      
+            </div>
+
+          </div>
+        </section>
+
+      </main><!-- End #main -->
+
+      <a href="#" class="back-to-top d-flex align-items-center justify-content-center"><i class="bi bi-arrow-up-short"></i></a>
+
+{% endblock %}
+

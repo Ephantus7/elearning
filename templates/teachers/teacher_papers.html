@@ -1,0 +1,159 @@
+{% extends 'teachers/teacher_base.html' %}
+{% load static %}
+
+{% block title %}
+    Papers | E-Learning Platform
+{% endblock title %}
+
+{% block content %}
+      <main id="main" class="main">
+        <div class="pagetitle">
+          <h1>Past Papers</h1>
+          <nav>
+            <ol class="breadcrumb">
+              <li class="breadcrumb-item"><a href="{% url 'student_home' %}">Home</a></li>
+              <li class="breadcrumb-item active">Past Papers</li>
+            </ol>
+          </nav>
+        </div><!-- End Page Title -->
+
+        <section class="section">
+          <div class="row align-items-top">
+            <div class="col-lg-12">
+            {% if messages %}
+              {% for message in messages %}
+                <div class="col-lg-12">
+                  <div class="alert alert-{{ message.tags }}">
+                    {{ message }}
+                  </div>
+                </div>
+              {% endfor %}
+            {% endif %}
+
+            <div class="col-lg-12">
+              <div class="card">
+                <div class="card-body">
+                  <h5 class="card-title">Add Paper</h5>
+                  <p>Click the button below to add a new paper</p>
+
+                  <!-- New Paper Modal -->
+                  <button type="button" class="btn btn-outline-primary" data-bs-toggle="modal" data-bs-target="#disablebackdrop">
+                  New Paper
+                  </button>
+                  <div class="modal fade" id="disablebackdrop" tabindex="-1" data-bs-backdrop="false">
+                    <div class="modal-dialog modal-dialog-scrollable modal-lg">
+                      <div class="modal-content">
+                      <div class="modal-header">
+                        <h5 class="modal-title" >New Past Paper</h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                      </div>
+                      <div class="modal-body">
+                        <form method="POST" enctype="multipart/form-data" class="needs-validation" novalidate>
+                          {% csrf_token %}
+
+                          <div class="row mb-3">
+                            <label class="col-sm-2 col-form-label">Paper Course</label>
+                            <div class="col-sm-10">
+                              {{ form.course }}
+                             <div class="valid-feedback"> Looks good! </div>
+                              <div class="invalid-feedback"> Please choose a course.</div>
+                            </div>
+                          </div>
+
+                          <div class="row mb-3">
+                            <label class="col-sm-2 col-form-label">Paper Subject</label>
+                            <div class="col-sm-10">
+                                {{ form.subject }}
+                                <div class="valid-feedback"> Looks good! </div>
+                                <div class="invalid-feedback"> Please choose a subject.</div>
+                            </div>
+                          </div>
+
+                          <div class="row mb-3">
+                            <label for="inputText" class="col-sm-2 col-form-label">Paper Title</label>
+                            <div class="col-sm-10">
+                                {{ form.paper_title }}
+                                <div class="valid-feedback"> Looks good! </div>
+                                <div class="invalid-feedback"> Please provide a paper title.</div>
+                            </div>
+                          </div>
+                          <div class="row mb-3">
+                            <label for="inputDate" class="col-sm-2 col-form-label">Paper Year</label>
+                            <div class="col-sm-10">
+                                {{ form.paper_year }}
+                                <div class="valid-feedback"> Looks good! </div>
+                                <div class="invalid-feedback"> Please provide a paper year.</div>
+                            </div>
+                          </div>
+
+                          <div class="row mb-3">
+                            <label for="inputNumber" class="col-sm-2 col-form-label">Paper File</label>
+                            <div class="col-sm-10">
+                              {{ form.paper }}
+                              <div class="valid-feedback"> Looks good! </div>
+                              <div class="invalid-feedback"> Please provide a paper file.</div>
+                            </div>
+                          </div>
+
+                          <div class="row mb-3">
+                            <label class="col-sm-2 col-form-label">Submit</label>
+                            <div class="col-sm-10">
+                                <button type="submit" class="btn btn-primary">Add Paper</button>
+                            </div>
+                          </div>
+                        </form>
+
+                        <div class="modal-footer">
+                          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                        </div>
+                          </div>
+                        </div>
+                      </div><!-- End New paper Modal-->
+
+                  </div>
+                </div>
+              </div>
+              {% if papers|length == 0 %}
+                <div class="col-lg-12">
+                  <div class="alert alert-warning" role="alert">
+                    No papers available. Contact your Administrator.
+                  </div>
+                </div>
+              {% endif %} 
+
+              <div class="row">
+                {% regroup papers by subject as subjects %}
+                {% for subject in subjects %}
+                  <ul class="list-group">
+                      <li class="list-group-item d-flex justify-content-between align-items-center">
+                            <div class="col-lg-12">
+                              <div class="card">
+                                  <div class="card-body">
+                                      <h5 class="card-title">{{ subject.grouper }}</h5>
+                                      {% for paper in subject.list %}
+                                        <ul class="list-group">
+                                          <li class="list-group-item d-flex justify-content-between align-items-center">
+                                            {{ paper.paper_title }}
+                                            <span class="badge bg-warning rounded-pill">
+                                                <a href="{{ paper.paper.url }}" download>Download Paper</a>
+                                            </span>
+                                          </li>
+                                        </ul>
+                                    {% endfor %}
+                                  </div>
+                              </div>
+                            </div>
+                      </li>
+                  </ul>
+                {% endfor %}
+              </div>
+
+            </div>
+
+          </div>
+        </section>
+
+      </main><!-- End #main -->
+
+      <a href="#" class="back-to-top d-flex align-items-center justify-content-center"><i class="bi bi-arrow-up-short"></i></a>
+{% endblock %}

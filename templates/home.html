@@ -1,0 +1,100 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}
+    Landing Page | E-Learning Platform
+{% endblock %}
+
+{% block content %}
+    <div class="container-fluid">
+     <!-- ======= Header ======= -->
+      <header id="header" class="header fixed-top d-flex align-items-center">
+
+        <div class="d-flex align-items-center justify-content-between">
+          <a href="{% url 'home' %}" class="logo d-flex align-items-center">
+            <img src="assets/img/favicon.jpg" alt="">
+            <span class="d-none d-lg-block">E-Learning Platform</span>
+          </a>
+          <i class="bi bi-list toggle-sidebar-btn"></i>
+        </div><!-- End Logo -->
+
+      </header><!-- End Header -->
+
+      <!-- ======= Sidebar ======= -->
+      <aside id="sidebar" class="sidebar">
+
+        <ul class="sidebar-nav" id="sidebar-nav">
+
+          <li class="nav-item">
+            <a class="nav-link collapsed" href="{% url 'signup' %}">
+              <i class="bi bi-card-list"></i>
+              <span>Register</span>
+            </a>
+          </li><!-- End Register Page Nav -->
+
+          <li class="nav-item">
+            <a class="nav-link collapsed" href="{% url 'login' %}">
+              <i class="bi bi-box-arrow-in-right"></i>
+              <span>Login</span>
+            </a>
+          </li><!-- End Login Page Nav -->
+
+
+        </ul>
+
+      </aside><!-- End Sidebar-->
+
+      <main id="main" class="main">
+
+        <div class="pagetitle">
+          <h1>E-Learning Platform</h1>
+          <nav>
+            <ol class="breadcrumb">
+              <li class="breadcrumb-item"><a href="index.html">Home</a></li>
+              <li class="breadcrumb-item active">Landing Page</li>
+            </ol>
+          </nav>
+        </div><!-- End Page Title -->
+
+        <section class="section">
+          <div class="row">
+            {% if messages %}
+              {% for message in messages %}
+                <div class="alert alert-{{ message.tags }} alert-dismissible fade show" role="alert">
+                  {{ message }}
+                  <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                </div>
+              {% endfor %}
+            {% endif %}
+
+            <div class="col-lg-6">
+
+              <div class="card">
+                <div class="card-body">
+                  <h5 class="card-title"><a href="{% url 'student_home' %}">For Students</a></h5>
+                  <p>Kindly login to access study materials. If you do not hava an account, contact your Administrator.
+                  </p>
+                </div>
+              </div>
+
+            </div>
+
+            <div class="col-lg-6">
+
+              <div class="card">
+                <div class="card-body">
+                  <h5 class="card-title"><a href="{% url 'teacher_home' %}">For Teachers</a></h5>
+                  <p>Kindly login to create study materials. If you do not hava an account, contact your Administrator.
+                  </p>
+                </div>
+              </div>
+            </div>
+          </div>
+        </section>
+
+      </main><!-- End #main -->
+
+
+      <a href="#" class="back-to-top d-flex align-items-center justify-content-center"><i class="bi bi-arrow-up-short"></i></a>
+    </div>
+{% endblock %}

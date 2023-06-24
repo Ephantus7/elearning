@@ -1,0 +1,15 @@
+*.*~
+*~
+*.pyc
+db.sqlite3
+*.egg-info*
+build*
+*.egg
+*.log
+*.pot
+Scripts/**
+media/**
+include/**
+Lib/**
+.env
+```

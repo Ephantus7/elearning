@@ -1,0 +1,68 @@
+{% extends 'students/student_base.html' %}
+{% load static %}
+
+{% block title %}
+    Papers | E-Learning Platform
+{% endblock title %}
+
+
+{% block content %}
+      <main id="main" class="main">
+
+        <div class="pagetitle">
+          <h1>Past Papers</h1>
+          <nav>
+            <ol class="breadcrumb">
+              <li class="breadcrumb-item"><a href="{% url 'student_home' %}">Home</a></li>
+              <li class="breadcrumb-item active">Past Papers</li>
+            </ol>
+          </nav>
+        </div><!-- End Page Title -->
+
+        <section class="section">
+          <div class="row align-items-top">
+            <div class="col-lg-12">
+              {% if papers|length == 0 %}
+                <div class="col-lg-12">
+                  <div class="alert alert-warning" role="alert">
+                    No papers available. Contact your Administrator.
+                  </div>
+                </div>
+              {% endif %} 
+
+              <div class="row">
+                {% regroup papers by subject as subjects %}
+                {% for subject in subjects %}
+                  <ul class="list-group">
+                      <li class="list-group-item d-flex justify-content-between align-items-center">
+                            <div class="col-lg-12">
+                              <div class="card">
+                                  <div class="card-body">
+                                      <h5 class="card-title">{{ subject.grouper }}</h5>
+                                      {% for paper in subject.list %}
+                                        <ul class="list-group">
+                                          <li class="list-group-item d-flex justify-content-between align-items-center">
+                                            {{ paper.paper_title }}
+                                            <span class="badge bg-warning rounded-pill">
+                                                <a href="{{ paper.paper.url }}" download>Download Paper</a>
+                                            </span>
+                                          </li>
+                                        </ul>
+                                    {% endfor %}
+                                  </div>
+                              </div>
+                            </div>
+                      </li>
+                  </ul>
+                {% endfor %}
+              </div>
+
+            </div>
+
+          </div>
+        </section>
+
+      </main><!-- End #main -->
+
+      <a href="#" class="back-to-top d-flex align-items-center justify-content-center"><i class="bi bi-arrow-up-short"></i></a>
+{% endblock %}

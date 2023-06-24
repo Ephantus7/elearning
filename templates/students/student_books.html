@@ -1,0 +1,70 @@
+{% extends 'students/student_base.html' %}
+{% load static %}
+
+{% block title %}
+    Books | E-Learning Platform
+{% endblock title %}
+
+{% block content %}
+      <main id="main" class="main">
+
+        <div class="pagetitle">
+          <h1>Books</h1>
+          <nav>
+            <ol class="breadcrumb">
+              <li class="breadcrumb-item"><a href="{% url 'student_home' %}">Home</a></li>
+              <li class="breadcrumb-item active">Books</li>
+            </ol>
+          </nav>
+        </div><!-- End Page Title -->
+
+        <section class="section">
+          <div class="row align-items-top">
+            <div class="col-lg-12">  
+              
+              {% if books|length == 0 %}
+                
+              {% endif %}    
+
+              {% for book in books  %}
+              {% empty %}
+                <div class="col-lg-12">
+                  <div class="alert alert-warning" role="alert">
+                    No books available. Please check back later.
+                  </div>
+                </div>
+              {% endfor %}
+
+              {% for book in books  %}
+
+              <div class="col-lg-12">
+
+                <!-- Card with an image on left -->
+                <div class="card mb-3">
+                  <div class="row g-0">
+                    <div class="col-md-4">
+                      <img src="{{ book.book_image.url }}" class="img-fluid rounded-start" alt="...">
+                    </div>
+                    <div class="col-md-8">
+                      <div class="card-body">
+                        <h5 class="card-title">{{ book.book_title }}</h5>
+                        <p class="card-text">{{ book.book_description }}</p>
+                        <p class="card-text">
+                            <a href="{{ book.book_file.url }}" class="btn btn-primary" download>Download Resource</a>
+                        </p>
+                      </div>
+                    </div>
+                  </div>
+                </div><!-- End Card with an image on left -->
+              </div>
+
+              {% endfor %}
+            </div>
+
+          </div>
+        </section>
+
+      </main><!-- End #main -->
+
+      <a href="#" class="back-to-top d-flex align-items-center justify-content-center"><i class="bi bi-arrow-up-short"></i></a>
+{% endblock %}

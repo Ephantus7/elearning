@@ -1,0 +1,60 @@
+{% extends 'students/student_base.html' %}
+{% load static %}
+{% load embed_video_tags %}
+
+{% block title %}
+    Videos | E-Learning Platform
+{% endblock title %}
+
+
+{% block content %}
+      <main id="main" class="main">
+
+        <div class="pagetitle">
+          <h1>Video Tutorials</h1>
+          <nav>
+            <ol class="breadcrumb">
+              <li class="breadcrumb-item"><a href="{% url 'student_home' %}">Home</a></li>
+              <li class="breadcrumb-item active">Videos</li>
+            </ol>
+          </nav>
+        </div><!-- End Page Title -->
+
+        <section class="section">
+          <div class="row align-items-top">
+            {% if videos|length == 0 %}
+                <div class="col-lg-12">
+                  <div class="alert alert-warning" role="alert">
+                    No videos available. Contact your Administrator.
+                  </div>
+                </div>
+              {% endif %} 
+
+                <div class="row">
+
+                  {% for video in videos %}
+
+                      <!-- Card with titles, buttons, and links -->
+                      <div class="col-lg-6">
+                          <div class="card">
+                            <div class="card-body">
+                              <h5 class="card-title">{{ video.video_title }}</h5>
+                              {% video video.video 'tiny' %}
+                              <p class="card-text">{{ video.video_description }}</p>
+                              <p class="card-text"><a href="https://youtu.be/pTB0EiLXUC8" class="btn btn-primary">Play on Youtube</a></p>
+                            </div>
+                          </div><!-- End Card with titles, buttons, and links -->
+                        </div>
+
+                  {% endfor %}
+
+              </div>
+            </div>
+
+          </div>
+        </section>
+
+      </main><!-- End #main -->
+
+      <a href="#" class="back-to-top d-flex align-items-center justify-content-center"><i class="bi bi-arrow-up-short"></i></a>
+{% endblock %}

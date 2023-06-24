@@ -1,0 +1,262 @@
+{% extends 'teachers/teacher_base.html' %}
+{% load static %}
+
+{% block title %}
+    All Quizes | E-Learning Platform
+{% endblock title %}
+
+{% block content %}
+      <main id="main" class="main">
+
+        <div class="pagetitle">
+          <h1>Exams</h1>
+          <nav>
+            <ol class="breadcrumb">
+              <li class="breadcrumb-item"><a href="{% url 'teacher_home' %}">Home</a></li>
+                <li class="breadcrumb-item"><a href="{% url 'teacher_assignments' %}">Exams</a></li>
+              <li class="breadcrumb-item active">Categories</li>
+            </ol>
+          </nav>
+        </div><!-- End Page Title -->
+
+        <section class="section">
+          <div class="row align-items-top">
+            <div class="col-lg-12">
+
+            {% if messages %}
+                {% for message in messages %}
+                    <div class="col-lg-12">
+                    <div class="alert alert-{{ message.tags }}">
+                        {{ message }}
+                    </div>
+                    </div>
+                {% endfor %}
+            {% endif %}
+
+            <div class="col-lg-12">
+                <div class="card">
+                    <div class="card-body">
+                    <h5 class="card-title">Add Quizzes</h5>
+                    <p>Click the button below to add a new Quiz</p>
+
+                    <!-- New Quiz Modal -->
+                    <button type="button" class="btn btn-outline-primary" data-bs-toggle="modal" data-bs-target="#disablebackdrop">
+                    New Quiz
+                    </button>
+                    <div class="modal fade" id="disablebackdrop" tabindex="-1" data-bs-backdrop="false">
+                        <div class="modal-dialog modal-dialog-scrollable modal-lg">
+                        <div class="modal-content">
+                        <div class="modal-header">
+                            <h5 class="modal-title" >New Quiz</h5>
+                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                        </div>
+                        <div class="modal-body">
+                            <form method="POST" enctype="multipart/form-data" class="needs-validation" novalidate>
+                            {% csrf_token %}
+
+                            <div class="row mb-3">
+                                <label class="col-sm-2 col-form-label">Quiz Course</label>
+                                <div class="col-sm-10">
+                                {{ form.course }}
+                                <div class="valid-feedback">Looks Good!</div>
+                                <div class="invalid-feedback">Please choose a quiz Course.</div>
+                                </div>
+                            </div>
+
+                            <div class="row mb-3">
+                                <label class="col-sm-2 col-form-label">Quiz Subject</label>
+                                <div class="col-sm-10">
+                                    {{ form.subject }}
+                                    <div class="valid-feedback">Looks Good!</div>
+                                    <div class="invalid-feedback">Please choose a Subject.</div>
+                                </div>
+                            </div>
+
+                            <div class="row mb-3">
+                                <label class="col-sm-2 col-form-label">Quiz Category</label>
+                                <div class="col-sm-10">
+                                {{ form.category }}
+                                <div class="valid-feedback">Looks Good!</div>
+                                <div class="invalid-feedback">Please choose a Category.</div>
+                                </div>
+                            </div>
+
+                            <div class="row mb-3">
+                                <label for="inputText" class="col-sm-2 col-form-label">Quiz Title</label>
+                                <div class="col-sm-10">
+                                {{ form.title }}
+                                <div class="valid-feedback">Looks Good!</div>
+                                <div class="invalid-feedback">Please enter a Quiz Title.</div>
+                                </div>
+                            </div>
+
+                            <div class="row mb-3">
+                                <label for="inputText" class="col-sm-2 col-form-label">Quiz URL</label>
+                                <div class="col-sm-10">
+                                    {{ form.url }}
+                                    <div class="valid-feedback">Looks Good!</div>
+                                    <div class="invalid-feedback">Please enter a user friendly Quiz URL.</div>
+                                </div>
+                            </div>
+
+                            <div class="row mb-3">
+                                <label for="inputNumber" class="col-sm-2 col-form-label">Quiz Description</label>
+                                <div class="col-sm-10">
+                                    {{ form.description }}
+                                    <div class="valid-feedback">Looks Good!</div>
+                                    <div class="invalid-feedback">Please enter a Quiz Description</div>
+                                </div>
+                            </div>
+
+                            <div class="row mb-3">
+                                <div class="col-sm-10">
+                                    <div class="form-check">
+                                        {{ form.answers_at_end }}
+                                        <div class="valid-feedback">Looks Good!</div>
+                                        <label class="form-check-label" for="gridCheck1">
+                                            Answers at End
+                                        </label>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="row mb-3">
+                                <div class="col-sm-10">
+                                    <div class="form-check">
+                                        {{ form.exam_paper }}
+                                        <div class="valid-feedback">Looks Good!</div>
+                                        <label class="form-check-label" for="gridCheck1">
+                                            Exam Paper
+                                        </label>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="row mb-3">
+                                <div class="col-sm-10">
+                                    <div class="form-check">
+                                        {{ form.draft }}
+                                        <div class="valid-feedback">Looks Good!</div>
+                                        <label class="form-check-label" for="gridCheck1">
+                                            Draft
+                                        </label>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="row mb-3">
+                                <div class="col-sm-10">
+                                    <div class="form-check">
+                                        {{ form.single_attempt }}
+                                        <div class="valid-feedback">Looks Good!</div>
+                                        <label class="form-check-label" for="gridCheck1">
+                                            Single Attempt
+                                        </label>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="row mb-3">
+                                <label for="inputNumber" class="col-sm-2 col-form-label">Success Text</label>
+                                <div class="col-sm-10">
+                                    {{ form.success_text }}
+                                    <div class="valid-feedback">Looks Good!</div>
+                                    <div class="invalid-feedback">Please enter a Success Text to be displayed if student passes</div>
+                                </div>
+                            </div>
+
+                            <div class="row mb-3">
+                                <label for="inputNumber" class="col-sm-2 col-form-label">Fail Text</label>
+                                <div class="col-sm-10">
+                                    {{ form.fail_text }}
+                                    <div class="valid-feedback">Looks Good!</div>
+                                    <div class="invalid-feedback">Please enter a Fail Text to be displayed if student fails</div>
+                                </div>
+                            </div>
+
+                            <div class="row mb-3">
+                                <label for="inputNumber" class="col-sm-2 col-form-label">Pass Mark</label>
+                                <div class="col-sm-10">
+                                    {{ form.pass_mark }}
+                                </div>
+                            </div>
+
+                            <div class="row mb-3">
+                                <label class="col-sm-2 col-form-label">Submit</label>
+                                <div class="col-sm-10">
+                                <button type="submit" class="btn btn-primary">Add Quiz</button>
+                                </div>
+                            </div>
+                            </form>
+
+                            <div class="modal-footer">
+                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                            </div>
+                            </div>
+                            </div>
+                        </div><!-- End New book Modal-->
+
+                    </div>
+                    </div>
+                </div>
+
+              <div class="col-lg-12">
+                {% if quizzes|length == 0 %}
+                    <div class="col-lg-12">
+                      <div class="alert alert-warning" role="alert">
+                        <p>No categories have been added yet!</p>
+                      </div>
+                    </div>
+                {% else %}
+                  <div class="card">
+                    <div class="card-header">
+                      <h4>Exam Categories</h4>
+                    </div>
+
+                    <div class="card-body">
+                        <br>
+                        <table class="table table-striped table-bordered table-hover table-sm">
+                            <thead>
+                                <tr>
+                                <th>#</th>
+                                <th>Title</th>
+                                <th>Description</th>
+                                <th>Category</th>
+                                <th>Max Questions</th>
+                                <th>Pass Mark</th>
+                                <th>Actions</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {% for quiz in quizzes %}
+                                    <tr>
+                                    <td>{{ forloop.counter }}</td>
+                                    <td>{{ quiz.title }}</td>
+                                    <td>{{ quiz.description }}</td>
+                                    <td>{{ quiz.category }}</td>
+                                    <td>{{ quiz.max_questions }}</td>
+                                    <td>{{ quiz.pass_mark }}</td>
+                                    <td>
+                                        <a href="{% url 'quiz_marking' %}"
+                                            class="btn btn-outline-primary btn-sm">
+                                            View Attempts
+                                        </a>
+                                    </td>
+                                {% endfor %}
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                 {% endif %}
+              </div>
+
+            </div>
+          </div>
+        </section>
+
+      </main><!-- End #main -->
+
+      <a href="#" class="back-to-top d-flex align-items-center justify-content-center">
+          <i class="bi bi-arrow-up-short"></i>
+      </a>
+{% endblock %}

@@ -1,0 +1,492 @@
+{% extends 'students/student_base.html' %}
+{% load static %}
+{% now "DATETIME_FORMAT" as today %}
+
+{% block title %}
+    Home | E-Learning Platform
+{% endblock title %}
+
+
+{% block content %}
+   <main id="main" class="main">
+    {% if messages %}
+        {% for message in messages %}
+            <div class="card">
+                <div class="card-header">
+                    {% if messages %}
+                        {% for message in messages %}
+                          <div class="col-lg-12">
+                            <div class="alert alert-{{ message.tags }}">
+                              {{ message }}
+                            </div>
+                          </div>
+                        {% endfor %}
+                      {% endif %}
+                </div>
+            </div>
+        {% endfor %}
+    {% endif %}
+    <!-- ======= Breadcrumbs ======= -->
+    <div class="pagetitle">
+      <h1>Dashboard</h1>
+      <nav>
+        <ol class="breadcrumb">
+          <li class="breadcrumb-item"><a href="{% url 'student_home' %}">Home</a></li>
+          <li class="breadcrumb-item active">Dashboard</li>
+        </ol>
+      </nav>
+    </div><!-- End Page Title -->
+
+    <section class="section dashboard">
+      <div class="row">
+
+        <!-- Left side columns -->
+        <div class="col-lg-8">
+          <div class="row">
+
+            <!-- Customers Card -->
+            <div class="col-xxl-4 col-xl-6">
+
+              <div class="card info-card revenue-card">
+
+                <div class="card-body">
+                  <h5 class="card-title">Assignments | {{ student.stud_department.department_name|truncatechars:25 }}</h5>
+
+                  <div class="d-flex align-items-center">
+                    <div class="card-icon rounded-circle d-flex align-items-center justify-content-center">
+                      <i class="bi bi-list-task"></i>
+                    </div>
+                    <div class="ps-3">
+                      <p><strong>{{ assignments|length }}</strong> Assignments</p>
+                      <a href="{% url 'student_assignments' %}" class="btn btn-primary btn-sm">
+                        View All
+                      </a>
+                    </div>
+                  </div>
+
+                </div>
+              </div>
+
+            </div><!-- End Customers Card -->
+
+
+            <!-- Customers Card -->
+            <div class="col-xxl-4 col-xl-6">
+
+              <div class="card info-card sales-card">
+
+                <div class="card-body">
+                  <h5 class="card-title">Books | {{ student.stud_department.department_name|truncatechars:25 }}</h5>
+
+                  <div class="d-flex align-items-center">
+                    <div class="card-icon rounded-circle d-flex align-items-center justify-content-center">
+                      <i class="bi bi-book-half"></i>
+                    </div>
+                    <div class="ps-3">
+                      <p><strong>{{ books|length }}</strong> Books</p>
+                      <a href="{% url 'student_books' %}" class="btn btn-primary btn-sm">
+                        View All
+                      </a>
+                    </div>
+                  </div>
+
+                </div>
+              </div>
+
+            </div><!-- End Customers Card -->
+
+
+            <!-- Customers Card -->
+            <div class="col-xxl-4 col-xl-6">
+
+              <div class="card info-card revenue-card">
+
+                <div class="card-body">
+                  <h5 class="card-title">Past Papers | {{ student.stud_department.department_name|truncatechars:25 }}</h5>
+
+                  <div class="d-flex align-items-center">
+                    <div class="card-icon rounded-circle d-flex align-items-center justify-content-center">
+                      <i class="bi bi-book"></i>
+                    </div>
+                    <div class="ps-3">
+                      <p><strong>{{ papers|length }}</strong> Past Papers</p>
+                      <a href="{% url 'student_papers' %}" class="btn btn-primary btn-sm">
+                        View All
+                      </a>
+                    </div>
+                  </div>
+
+                </div>
+              </div>
+
+            </div><!-- End Customers Card -->
+
+             <!-- Customers Card -->
+             <div class="col-xxl-4 col-xl-6">
+
+              <div class="card info-card customers-card">
+
+                <div class="card-body">
+                  <h5 class="card-title">Videos | {{ student.stud_department.department_name|truncatechars:25 }}</h5>
+
+                  <div class="d-flex align-items-center">
+                    <div class="card-icon rounded-circle d-flex align-items-center justify-content-center">
+                      <i class="bi bi-youtube"></i>
+                    </div>
+                    <div class="ps-3">
+                      <p><strong>{{ videos|length }}</strong> Videos</p>
+                      <a href="{% url 'student_videos' %}" class="btn btn-primary btn-sm">
+                        View All
+                      </a>
+                    </div>
+                  </div>
+
+                </div>
+              </div>
+
+            </div><!-- End Customers Card -->
+
+            <div class="card">
+              <div class="card-body pb-0">
+                <h5 class="card-title">{{ student.stud_department.department_name|truncatechars:30 }} <span> | Assets</span></h5>
+
+                <div id="trafficChart" style="min-height: 400px;" class="echart"></div>
+
+                <script>
+                  document.addEventListener("DOMContentLoaded", () => {
+                    echarts.init(document.querySelector("#trafficChart")).setOption({
+                      tooltip: {
+                        trigger: 'item'
+                      },
+
+                      legend: {
+                        orient: 'vertical',
+                        top: '10%',
+                        left: 'left'
+                      },
+
+                      series: [{
+                        name: '{{ student.stud_department.department_name|truncatechars:15 }}',
+                        type: 'pie',
+                        radius: ['80%', '20%'],
+                        avoidLabelOverlap: true,
+                        label: {
+                          show: true,
+                        },
+
+                        emphasis: {
+                          label: {
+                            show: true,
+                            fontSize: '18',
+                            fontWeight: 'bold'
+                          },
+
+                          itemStyle: {
+                            shadowBlur: 10,
+                            shadowOffsetX: 0,
+                            shadowColor: 'rgba(0, 0, 0, 0.5)'
+                          }
+                        },
+                        labelLine: {
+                          show: true
+                        },
+                        data: [{
+                            value: {{ assignments|length }},
+                            name: 'Assignments'
+                          },
+                          {
+                            value: {{ books|length }},
+                            name: 'Books'
+                          },
+                          {
+                            value: {{ papers|length }},
+                            name: 'Past Papers'
+                          },
+                          {
+                            value: {{ videos|length }},
+                            name: 'Videos'
+                          },
+                        ]
+                      }]
+                    });
+                  });
+                </script>
+
+              </div>
+            </div><!-- End Website Traffic -->
+
+          </div>
+        </div><!-- End Left side columns -->
+
+        <!-- Right side columns -->
+        <div class="col-lg-4">
+
+          <!-- Recent Activity -->
+          <div class="card">
+            <div class="card-body">
+              <h5 class="card-title">Recent Activity <span>| Today</span></h5>
+
+              <div class="activity">
+
+                {% if recent_assignments|length != 0 %}
+                  <div>
+                    <h6 class="activity-title text-success">Assignments</h6>
+                  </div>
+                  {% for recent_assignment in recent_assignments %}
+                    <div class="activity-item d-flex">
+                      <div class="activite-label">{{ recent_assignment.date_uploaded|timesince }}</div>
+                      <i class='bi bi-circle-fill activity-badge text-success align-self-start'></i>
+                      <div class="activity-content">
+                        {{ recent_assignment.assignment_name }} was added
+                      </div>
+                    </div><!-- End activity item-->
+                  {% endfor %}
+                {% endif %}
+
+                {% if recent_books|length != 0 %}
+                  <div>
+                    <h6 class="activity-title text-info">Books</h6>
+                  </div>
+                  {% for recent_book in recent_books%}
+                    <div class="activity-item d-flex">
+                      <div class="activite-label">{{ recent_book.date_added|timesince }}</div>
+                      <i class='bi bi-circle-fill activity-badge text-info align-self-start'></i>
+                      <div class="activity-content">
+                        {{ recent_book.book_title }} was added
+                      </div>
+                    </div><!-- End activity item-->
+                  {% endfor %}
+                {% endif %}
+
+                {% if recent_papers|length != 0 %}
+                  <div>
+                    <h6 class="activity-title text-warning">Past Papers</h6>
+                  </div>
+                  {% for recent_paper in recent_papers %}
+                    <div class="activity-item d-flex">
+                      <div class="activite-label">{{ recent_paper.date_added|timesince }}</div>
+                      <i class='bi bi-circle-fill activity-badge text-warning align-self-start'></i>
+                      <div class="activity-content">
+                        {{ recent_paper.paper_title }} was added
+                      </div>
+                    </div><!-- End activity item-->
+                  {% endfor %}
+                {% endif %}
+
+                {% if recent_videos|length != 0 %}
+                  <div>
+                    <h6 class="activity-title text-primary">Videos</h6>
+                  </div>
+                  {% for recent_video in recent_videos %}
+                    <div class="activity-item d-flex">
+                      <div class="activite-label"> {{ recent_video.date_added|timesince }}</div>
+                      <i class='bi bi-circle-fill activity-badge text-primary align-self-start'></i>
+                      <div class="activity-content">
+                        {{ recent_video.video_title }} was added
+                      </div>
+                    </div><!-- End activity item-->
+                  {% endfor %}
+                {% endif %}
+              </div>
+
+            </div>
+          </div><!-- End Recent Activity -->
+
+        </div><!-- End Right side columns -->
+
+      </div><!-- End row -->
+
+      <div class="row">
+
+        <!-- start columns -->
+        <div class="col-lg-12">
+          <div class="row">
+
+           <!-- Recents -->
+            <div class="col-12">
+              <div class="card recent-sales overflow-auto">
+                <div class="card-body">
+                  <h5 class="card-title">Recently Added<span> | Today</span></h5>
+
+                  {% if recent_books|length == 0 %}
+                    <table class="table table-borderless ">
+                      <tbody>
+                        <tr>
+                          <div class="col-lg-12">
+                            <div class="alert alert-warning" role="alert">
+                              No recent books available. Please check back later.
+                              <button type="button" class="btn btn-outline-primary btn-sm" align="right">
+                                  <a href="{% url 'student_books' %}">View Books</a>
+                              </button>
+                            </div>
+                          </div>
+                        </tr>
+                      </tbody>
+                    </table>
+
+                  {% else %}
+                    <hr class="my-0">
+                    <table class="table table-hover table-bordered">
+                        <small><h4 align="center"><strong>Books</strong></h4></small>
+                        <hr class="my-0">
+                      <thead>
+                        <tr>
+                          <th scope="col">Code</th>
+                          <th scope="col">Name</th>
+                          <th scope="col">Book Cover</th>
+                          <th scope="col">Book File</th>
+                          <th scope="col">Added</th>
+                          <th scope="col">Action</th>
+                        </tr>
+                      </thead>
+                      {% for book in recent_books %}
+                        <tbody>
+                          <tr>
+                            <th scope="row"><a href="#">{{ book.subject.subject_code }}</a></th>
+                            <td>{{ book.subject|truncatechars:20 }}</td>
+                            <td>
+                                <img src="{{ book.book_image.url }}" class="rounded-start" width="70px" height="50px">
+                            </td>
+                            <td><a href="{{ book.book_file.url }}" class="text-primary" download>{{ book.book_title }}
+                                </a>
+                            </td>
+                            <td>{{ book.date_added|timesince }} Ago</td>
+                            <td>
+                              <button type="button" class="btn btn-outline-primary btn-sm">
+                                <a href="{% url 'student_books' %}">View</a>
+                              </button>
+                            </td>
+                            <td><hr></td>
+                          </tr>
+                        </tbody>
+                      {% endfor %}
+                    </table>
+                  {% endif %}
+
+                  {% if recent_papers|length == 0 %}
+                    <table class="table table-borderless table-hover">
+                      <tbody>
+                        <tr>
+                          <div class="col-lg-12">
+                            <div class="alert alert-warning" role="alert">
+                              No recent papers available. Please check back later.
+                              <button type="button" class="btn btn-outline-primary btn-sm" align="right">
+                                  <a href="{% url 'student_papers' %}">View Papers</a>
+                              </button>
+                            </div>
+                          </div>
+                        </tr>
+                      </tbody>
+                    </table>
+
+                  {% else %}
+
+                    <hr class="my-0">
+                    <table class="table table-borderless table-responsive">
+                    <small><h4 align="center"><strong>Papers</strong></h4></small>
+                    <hr class="my-0">
+                      <thead>
+                        <tr>
+                          <th scope="col">Paper Code</th>
+                          <th scope="col">Paper Year</th>
+                          <th scope="col">Subject</th>
+                          <th scope="col">Paper</th>
+                          <th scope="col">Added</th>
+                          <th scope="col">Action</th>
+                        </tr>
+                      </thead>
+                      {% for paper in recent_papers %}
+                        <tbody>
+                          <tr>
+                            <th scope="row"><a href="#">{{ paper.subject.subject_code }}</a></th>
+                            <td>{{ paper.paper_year }}</td>
+                            <td>{{ paper.subject }}</td>
+                            <td><a href="{{ paper.paper.url }}" class="text-primary" download>
+                                {{ paper.paper_title }}</a>
+                            </td>
+                            <td>{{ paper.date_added|timesince }} Ago</td>
+                            <td>
+                              <button type="button" class="btn btn-outline-primary btn-sm">
+                                <a href="{% url 'student_papers' %}">View</a>
+                              </button>
+                            </td>
+                            <td><hr></td>
+                          </tr>
+                        </tbody>
+                      {% endfor %}
+                    </table>
+                  {% endif %}
+
+                    {% if recent_assignments|length == 0 %}
+                      <table class="table table-borderless ">
+                        <tbody>
+                          <tr>
+                            <div class="col-lg-12">
+                              <div class="alert alert-warning" role="alert">
+                                No recent assignments available. Please check back later.
+                                <button type="button" class="btn btn-outline-primary btn-sm" align="right">
+                                  <a href="{% url 'student_assignments' %}">View Assignments</a>
+                              </button>
+                              </div>
+                            </div>
+                          </tr>
+                        </tbody>
+                      </table>
+
+                    {% else %}
+                      <hr class="my-0">
+                      <table class="table table-borderless ">
+                        <small><h4 align="center"><strong>Assignments</strong></h4></small>
+                        <hr class="my-0">
+                        <thead>
+                          <tr>
+                            <th scope="col">Code</th>
+                            <th scope="col">Lecturer</th>
+                            <th scope="col">Subject</th>
+                            <th scope="col">Assignment</th>
+                            <th scope="col">Added</th>
+                            <th scope="col">Deadline</th>
+                            <th scope="col">Action</th>
+                          </tr>
+                        </thead>
+
+                        {% for assignment in recent_assignments %}
+                          <tbody>
+                            <tr>
+                              <th scope="row"><a href="#">{{ assignment.subject.subject_code }}</a></th>
+                              <td>{{ assignment.created_by}}</td>
+                              <td>{{ assignment.subject }}</td>
+                              <td>
+                                <a href="{{ assignment.assignment_file.url }}" class="text-primary" download>
+                                  {{ assignment.assignment_name}}
+                                </a>
+                              </td>
+                              <td>{{ assignment.created_at|timesince }} Ago</td>
+                              <td>{{ assignment.deadline|timeuntil }}</td>
+                              <td>
+                                <button type="button" class="btn btn-outline-primary btn-sm">
+                                  <a href="{% url 'student_assignments' %}">View</a>
+                                </button>
+                              </td>
+                              <td><hr></td>
+                            </tr>
+                          </tbody>
+                        {% endfor %}
+                      </table>
+                    {% endif %}
+                </div>
+
+              </div>
+            </div><!-- End recents -->
+
+          </div>
+        </div><!-- End  columns -->
+
+
+
+      </div>
+    </section>
+
+  </main><!-- End #main -->
+
+{% endblock %}

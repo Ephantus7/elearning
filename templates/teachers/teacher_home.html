@@ -1,0 +1,400 @@
+{% extends 'teachers/teacher_base.html' %}
+{% load static %}
+
+{% block title %}
+    Home | E-Learning Platform
+{% endblock title %}
+
+{% block content %}
+     <main id="main" class="main">
+
+    <div class="pagetitle">
+      <h1>Dashboard</h1>
+      <nav>
+        <ol class="breadcrumb">
+          <li class="breadcrumb-item"><a href="{% url 'teacher_home' %}">Home</a></li>
+          <li class="breadcrumb-item active">Dashboard</li>
+        </ol>
+      </nav>
+    </div><!-- End Page Title -->
+
+    <section class="section dashboard">
+      <div class="row">
+
+        <!-- Left side columns -->
+        <div class="col-lg-8">
+          <div class="row">
+
+            <!-- Customers Card -->
+            <div class="col-xxl-4 col-xl-6">
+
+              <div class="card info-card revenue-card">
+
+                <div class="card-body">
+                  <h5 class="card-title">Assignments | {{ teacher.course.department.department_name|truncatechars:25 }}</h5>
+
+                  <div class="d-flex align-items-center">
+                    <div class="card-icon rounded-circle d-flex align-items-center justify-content-center">
+                      <i class="bi bi-list-task"></i>
+                    </div>
+                    <div class="ps-3">
+                      <p><strong>{{ assignments|length }}</strong> Assignments</p>
+                      <a href="{% url 'teacher_assignments' %}" class="btn btn-primary btn-sm">
+                        View All
+                      </a>
+                    </div>
+                  </div>
+
+                </div>
+              </div>
+
+            </div><!-- End Customers Card -->
+
+            
+            <!-- Customers Card -->
+            <div class="col-xxl-4 col-xl-6">
+
+              <div class="card info-card sales-card">
+
+                <div class="card-body">
+                  <h5 class="card-title">Past Papers | {{ teacher.course.department.department_name|truncatechars:25 }}</h5>
+
+                  <div class="d-flex align-items-center">
+                    <div class="card-icon rounded-circle d-flex align-items-center justify-content-center">
+                      <i class="bi bi-book"></i>
+                    </div>
+                    <div class="ps-3">
+                      <p><strong>{{ recent_papers|length }}</strong> Past Papers</p>
+                      <a href="{% url 'teacher_papers' %}" class="btn btn-primary btn-sm">
+                        View All
+                      </a>
+                    </div>
+                  </div>
+
+                </div>
+              </div>
+
+            </div><!-- End Customers Card -->
+
+            
+            <!-- Customers Card -->
+            <div class="col-xxl-4 col-xl-6">
+
+              <div class="card info-card revenue-card">
+
+                <div class="card-body">
+                  <h5 class="card-title">Books | {{ teacher.course.department.department_name|truncatechars:25 }}</h5>
+
+                  <div class="d-flex align-items-center">
+                    <div class="card-icon rounded-circle d-flex align-items-center justify-content-center">
+                      <i class="bi bi-book-half"></i>
+                    </div>
+                    <div class="ps-3">
+                      <p><strong>{{ books|length }}</strong> Books</p>
+                      <a href="{% url 'teacher_books' %}" class="btn btn-primary btn-sm">
+                        View All
+                      </a>
+                    </div>
+                  </div>
+
+                </div>
+              </div>
+
+            </div><!-- End Customers Card -->
+
+             <!-- Customers Card -->
+             <div class="col-xxl-4 col-xl-6">
+
+              <div class="card info-card customers-card">
+
+                <div class="card-body">
+                  <h5 class="card-title">Videos | {{ teacher.course.department.department_name|truncatechars:25 }}</h5>
+
+                  <div class="d-flex align-items-center">
+                    <div class="card-icon rounded-circle d-flex align-items-center justify-content-center">
+                      <i class="bi bi-youtube"></i>
+                    </div>
+                    <div class="ps-3">
+                      <p><strong>{{ videos|length }}</strong> Videos</p>
+                      <a href="{% url 'teacher_videos' %}" class="btn btn-primary btn-sm">
+                        View All
+                      </a>
+                    </div>
+                  </div>
+
+                </div>
+              </div>
+
+            </div><!-- End Customers Card -->
+
+            <div class="card">
+              <div class="card-body pb-0">
+                <h5 class="card-title">{{ teacher.course.department.department_name|truncatechars:30 }} <span> | Assets</span></h5>
+  
+                <div id="trafficChart" style="min-height: 400px;" class="echart"></div>
+  
+                <script>
+                  document.addEventListener("DOMContentLoaded", () => {
+                    echarts.init(document.querySelector("#trafficChart")).setOption({
+                      tooltip: {
+                        trigger: 'item'
+                      },
+
+                      legend: {
+                        top: '5%',
+                        left: 'center'
+                      },
+
+                      series: [{
+                        name: '{{ teacher.course.department.department_name|truncatechars:15 }}',
+                        type: 'pie',
+                        radius: ['40%', '70%'],
+                        avoidLabelOverlap: false,
+                        label: {
+                          show: false,
+                          position: 'center'
+                        },
+
+                        emphasis: {
+                          label: {
+                            show: true,
+                            fontSize: '18',
+                            fontWeight: 'bold'
+                          }
+                        },
+                        labelLine: {
+                          show: false
+                        },
+                        data: [{
+                            value: {{ assignments|length }},
+                            name: 'Assignments'
+                          },
+                          {
+                            value: {{ books|length }},
+                            name: 'Books'
+                          },
+                          {
+                            value: {{ papers|length }},
+                            name: 'Past Papers'
+                          },
+                          {
+                            value: {{ videos|length }},
+                            name: 'Videos'
+                          },
+                        ]
+                      }]
+                    });
+                  });
+                </script>
+  
+              </div>
+            </div><!-- End Website Traffic -->  
+
+          </div>
+        </div><!-- End Left side columns -->
+
+        <!-- Right side columns -->
+        <div class="col-lg-4">
+
+          <!-- Recent Activity -->
+          <div class="card">
+            <div class="card-body">
+              <h5 class="card-title">Recent Activity <span>| Today</span></h5>
+
+              <div class="activity">
+
+                {% if recent_assignment_uploads|length != 0 %}
+                  <div>
+                    <h6 class="activity-title text-success">Assignment Uploads</h6>
+                  </div>
+                  {% for recent_upload in recent_assignment_uploads %}
+                    <div class="activity-item d-flex">
+                      <div class="activite-label">{{ recent_student.user.date_joined|timesince }}</div>
+                      <i class='bi bi-circle-fill activity-badge text-success align-self-start'></i>
+                      <div class="activity-content">
+                        {{ recent_upload.student.stud_name }} uploaded an assignment
+                      </div>
+                    </div><!-- End activity item-->
+                  {% endfor %}
+                {% endif %}
+
+                {% if recent_assignments|length != 0 %}
+                  <div>
+                    <h6 class="activity-title text-info">Assignments</h6>
+                  </div>
+                  {% for recent_assignment in recent_assignments %}
+                    <div class="activity-item d-flex">
+                      <div class="activite-label">{{ recent_teacher.user.date_joined|timesince }}</div>
+                      <i class='bi bi-circle-fill activity-badge text-info align-self-start'></i>
+                      <div class="activity-content">
+                        You added - {{ recent_assignment.assignment_name }}
+                      </div>
+                    </div><!-- End activity item-->
+                  {% endfor %}
+                {% endif %}
+
+                {% if recent_papers|length != 0 %}
+                  <div>
+                    <h6 class="activity-title text-warning">Past Papers</h6>
+                  </div>
+                  {% for recent_paper in recent_papers %}
+                    <div class="activity-item d-flex">
+                      <div class="activite-label">{{ recent_paper.date_added|timesince }}</div>
+                      <i class='bi bi-circle-fill activity-badge text-warning align-self-start'></i>
+                      <div class="activity-content">
+                        You Added - {{ recent_paper.paper_title }}
+                      </div>
+                    </div><!-- End activity item-->
+                  {% endfor %}
+                {% endif %}
+
+                {% if recent_books|length != 0 %}
+                  <div>
+                    <h6 class="activity-title text-primary">Books</h6>
+                  </div>
+                  {% for recent_book in recent_books %}
+                    <div class="activity-item d-flex">
+                      <div class="activite-label"> {{ recent_book.date_added|timesince }}</div>
+                      <i class='bi bi-circle-fill activity-badge text-primary align-self-start'></i>
+                      <div class="activity-content">
+                       You Added - {{ recent_book.book_title }}
+                      </div>
+                    </div><!-- End activity item-->
+                  {% endfor %}
+                {% endif %}
+
+                {% if recent_videos|length != 0 %}
+                  <div>
+                    <h6 class="activity-title text-primary">Videos</h6>
+                  </div>
+                  {% for recent_video in recent_videos %}
+                    <div class="activity-item d-flex">
+                      <div class="activite-label"> {{ recent_video.date_added|timesince }}</div>
+                      <i class='bi bi-circle-fill activity-badge text-primary align-self-start'></i>
+                      <div class="activity-content">
+                       You Added - {{ recent_video.video_title }}
+                      </div>
+                    </div><!-- End activity item-->
+                  {% endfor %}
+                {% endif %}
+              </div>
+
+            </div>
+          </div><!-- End Recent Activity -->
+
+        </div><!-- End Right side columns -->
+
+      </div>
+
+      <div class="row">
+
+        <!-- start columns -->
+        <div class="col-lg-12">
+          <div class="row">
+
+           <!-- Recents -->
+            <div class="col-12">
+              <div class="card recent-sales overflow-auto">
+                <div class="card-body">
+                  <h5 class="card-title">Recently Added<span> | Today</span></h5>
+
+                  {% if recent_assignment_uploads|length == 0 %}
+                    <table class="table table-borderless ">
+                      <tbody>
+                        <tr>
+
+                        </tr>
+                      </tbody>
+                    </table>
+
+                  {% else %}
+                    <table class="table table-borderless ">
+                      <thead>
+                        <tr>
+                          <th scope="col">#</th>
+                          <th scope="col">Assignment</th>
+                          <th scope="col">Upload by</th>
+                          <th scope="col">Uploaded</th>
+                          <th scope="col">Deadline</th>
+                          <th scope="col">Actions</th>
+                        </tr>
+                      </thead>
+                      {% for upload in recent_assignment_uploads %}
+                        <tbody>
+                          <tr>
+                            <th scope="row"><a href="#">{{ forloop.counter }}</a></th>
+                            <td>{{ upload.assignment.assignment_name }}</td>
+                            <td>{{ upload.student }}</td>
+                            <td>{{ upload.date_uploaded|timesince }} ago</td>
+                            <td>{{ upload.assignment.deadline }}</td>
+                            <td>
+                                <span>
+                                    <a href="{% url 'teacher_assignment_details' upload.assignment.id %}"
+                                        class="btn btn-outline-primary btn-sm">
+                                        View
+                                    </a>
+                                </span>
+                            </td>
+                            <td><hr></td>
+                          </tr>
+                        </tbody>
+                      {% endfor %}
+                    </table>
+                  {% endif %}
+
+                  {% if recent_assignments|length == 0 %}
+                    <table class="table table-borderless ">
+                      <tbody>
+                        <tr>
+                          <div class="col-lg-12">
+                            <div class="alert alert-warning" role="alert">
+                              Assignments you create will appear here.
+                            </div>
+                          </div>
+                        </tr>
+                      </tbody>
+                    </table>
+
+                  {% else %}
+
+                    <table class="table table-borderless ">
+                      <thead>
+                        <tr>
+                          <th scope="col">#</th>
+                          <th scope="col">Assignment</th>
+                          <th scope="col">Assignment File</th>
+                          <th scope="col">Deadline</th>
+                        </tr>
+                      </thead>
+                      {% for assignment in recent_assignments %}
+                        <tbody>
+                          <tr>
+                            <th scope="row"><a href="#">{{ forloop.counter }}</a></th>
+                            <td>{{ assignment.assignment_name }}</td>
+                            <td>
+                                <a href="{{ assignment.assignment_file.url }}" class="text-primary" download>
+                                    Download Assignment File
+                                </a>
+                            </td>
+                            <td>{{ assignment.deadline|timeuntil }}</td>
+                            <td><hr></td>
+                          </tr>
+                        </tbody>
+                      {% endfor %}
+                    </table>
+                  {% endif %}
+                </div>
+
+              </div>
+            </div><!-- End recents -->
+
+          </div>
+        </div><!-- End  columns -->
+      </div>
+    </section>
+
+  </main><!-- End #main -->
+
+
+
+{% endblock %}

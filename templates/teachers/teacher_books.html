@@ -1,0 +1,177 @@
+{% extends 'teachers/teacher_base.html' %}
+{% load static %}
+
+{% block title %}
+	Books | E-Learning Platform
+{% endblock title %}
+
+{% block content %}
+	  <main id="main" class="main">
+
+		<div class="pagetitle">
+      
+		  <h1>Books</h1>
+		  <nav>
+			<ol class="breadcrumb">
+			  <li class="breadcrumb-item"><a href="{% url 'student_home' %}">Home</a></li>
+			  <li class="breadcrumb-item active">Books</li>
+			</ol>
+		  </nav>
+		</div><!-- End Page Title -->
+
+		<section class="section">
+		  <div class="row align-items-top">
+			<div class="col-lg-12">
+				{% if messages %}
+					{% for message in messages %}
+						<div class="col-lg-12">
+						<div class="alert alert-{{ message.tags }}">
+							{{ message }}
+						</div>
+						</div>
+					{% endfor %}
+				{% endif %}
+
+        <div class="col-lg-12">
+          <div class="card">
+            <div class="card-body">
+              <h5 class="card-title">Add Book</h5>
+              <p>Click the button below to add a new book</p>
+
+              <!-- New Book Modal -->
+              <button type="button" class="btn btn-outline-primary" data-bs-toggle="modal" data-bs-target="#disablebackdrop">
+              New Book
+              </button>
+              <div class="modal fade" id="disablebackdrop" tabindex="-1" data-bs-backdrop="false">
+                <div class="modal-dialog modal-dialog-scrollable modal-lg">
+                  <div class="modal-content">
+                  <div class="modal-header">
+                    <h5 class="modal-title" >New Book</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                  </div>
+                  <div class="modal-body">
+                    <form method="POST" enctype="multipart/form-data" class="needs-validation" novalidate>
+                      {% csrf_token %}
+
+                      <div class="row mb-3">
+                        <label class="col-sm-2 col-form-label">Book Course</label>
+                        <div class="col-sm-10">
+                          {{ form.course}}
+                          <div class="valid-feedback">Looks Good!</div>
+                          <div class="invalid-feedback">Please choose a Course.</div>
+                        </div>
+                      </div>
+
+                      <div class="row mb-3">
+                        <label class="col-sm-2 col-form-label">Book Subject</label>
+                        <div class="col-sm-10">
+                            {{ form.subject }}
+                            <div class="valid-feedback">Looks Good!</div>
+                            <div class="invalid-feedback">Please choose a Subject.</div>
+                        </div>
+                      </div>
+
+                      <div class="row mb-3">
+                        <label for="inputText" class="col-sm-2 col-form-label">Book Title</label>
+                        <div class="col-sm-10">
+                          {{ form.book_title }}
+                          <div class="valid-feedback">Looks Good!</div>
+                          <div class="invalid-feedback">Please enter a Book Title.</div>
+                        </div>
+                      </div>
+
+                      <div class="row mb-3">
+                        <label for="inputNumber" class="col-sm-2 col-form-label">Book Image</label>
+                        <div class="col-sm-10">
+                            {{ form.book_image }}
+                            <div class="valid-feedback">Looks Good!</div>
+                            <div class="invalid-feedback">Please choose a Book Thumbnail. Necessary for proper display</div>
+                        </div>
+                      </div>
+
+                      <div class="row mb-3">
+                        <label for="inputNumber" class="col-sm-2 col-form-label">Book File</label>
+                        <div class="col-sm-10">
+                          {{ form.book_file }}
+                          <div class="valid-feedback">Looks Good!</div>
+                          <div class="invalid-feedback">Please choose a Book File</div>
+                        </div>
+                      </div>
+
+                      <div class="row mb-3">
+                        <label for="inputNumber" class="col-sm-2 col-form-label">Book Description</label>
+                        <div class="col-sm-10">
+                            {{ form.book_description }}
+                            <div class="valid-feedback">Looks Good!</div>
+                            <div class="invalid-feedback">Please enter a Book Description</div>
+                        </div>
+                      </div>
+
+                      <div class="row mb-3">
+                        <label class="col-sm-2 col-form-label">Submit</label>
+                        <div class="col-sm-10">
+                        <button type="submit" class="btn btn-primary">Add Book</button>
+                        </div>
+                      </div>
+                    </form>
+
+                    <div class="modal-footer">
+                      <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                    </div>
+                      </div>
+                    </div>
+                  </div><!-- End New book Modal-->
+
+              </div>
+            </div>
+          </div>
+
+
+				{% if books|length == 0 %}
+
+				{% endif %}
+
+				{% for book in books  %}
+				{% empty %}
+					<div class="col-lg-12">
+					<div class="alert alert-warning" role="alert">
+						No books available. Please check back later.
+					</div>
+					</div>
+				{% endfor %}
+
+				{% for book in books  %}
+
+				<div class="col-lg-12">
+
+					<!-- Card with an image on left -->
+					<div class="card mb-3">
+					<div class="row g-0">
+						<div class="col-md-4">
+						<img src="{{ book.book_image.url }}" class="img-fluid rounded-start" alt="...">
+						</div>
+						<div class="col-md-8">
+						<div class="card-body">
+							<h5 class="card-title">{{ book.book_title }}</h5>
+							<p class="card-text">{{ book.book_description }}</p>
+							<p class="card-text">
+								<a href="{{ book.book_file.url }}" class="btn btn-primary" download>Download Resource</a>
+							</p>
+						</div>
+						</div>
+					</div>
+					</div><!-- End Card with an image on left -->
+				</div>
+
+				{% endfor %}
+			  </div>
+			</div>
+
+
+		  </div>
+		</section>
+
+	  </main><!-- End #main -->
+
+	  <a href="#" class="back-to-top d-flex align-items-center justify-content-center"><i class="bi bi-arrow-up-short"></i></a>
+{% endblock %}

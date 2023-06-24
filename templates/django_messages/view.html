@@ -1,0 +1,61 @@
+{% extends 'django_messages/base.html' %}
+{% load inbox %}
+{% load i18n %}
+
+{% block content %}
+<main id="main" class="main">
+
+    <div class="pagetitle">
+      <h1>Inbox</h1>
+      <nav>
+        <ol class="breadcrumb">
+          <li class="breadcrumb-item"><a href="{% url 'home' %}">Home</a></li>
+          <li class="breadcrumb-item active">Inbox</li>
+        </ol>
+      </nav>
+    </div><!-- End Page Title -->
+
+    <section class="section">
+      <div class="row align-items-top">
+        <div class="col-lg-12">  
+        
+          <div class="col-lg-12">
+
+            <div class="card">
+              <div class="card-body">
+                <h5 class="card-title">
+                  Subject: {{ message.subject }}
+                </h5>
+                
+                <h6 class="card-subtitle mb-2 text-muted">
+                  <strong>From: </strong>{{ message.sender }}
+                </h6>
+
+                <p class="card-text">
+                  {{ message.body|linebreaksbr }}
+                </p>
+                <a href="{% url 'messages_reply' message.id %}" class="card-link">
+                  Reply
+                </a>
+                <a href="{% url 'messages_delete' message.id %}" class="card-link">
+                  Delete
+                </a>
+                <br>
+                <br>
+                <h6 class="card-subtitle mb-2 text-muted">
+                    <strong>Sent at: </strong>{{ message.sent_at|date:_("DATETIME_FORMAT") }}
+                  </h6>
+              </div>
+            </div><!-- End Card with titles, buttons, and links -->
+  
+          </div>
+                  
+        </div>
+        <a href="{% url 'messages_compose' %}" class="d-flex align-items-right justify-content-right">
+          <span class="badge rounded-pill bg-primary p-2 ms-2">Compose</span>
+        </a>
+      </div>
+    </section>
+
+  </main><!-- End #main -->
+{% endblock %}

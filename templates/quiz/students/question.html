@@ -1,0 +1,110 @@
+{% extends "students/student_base.html" %}
+{% load i18n %}
+{% block title %}{% trans "All Quizzes" %}{% endblock %}
+{% load static %}
+
+{% block content %}
+	<main id="main" class="main">
+
+        <div class="pagetitle">
+          <h1>Exams</h1>
+          <nav>
+            <ol class="breadcrumb">
+              <li class="breadcrumb-item"><a href="{% url 'dashboard' %}">Home</a></li>
+              <li class="breadcrumb-item"><a href="{% url 'student_quiz_index' %}">Exams</a></li>
+              <li class="breadcrumb-item active">{{ quiz.title|truncatechars:10 }}</li>
+              <li class="breadcrumb-item"><a href="">{{ quiz.question|truncatechars:10 }}</a></li>
+            </ol>
+          </nav>
+        </div><!-- End Page Title -->
+
+        <section class="section">
+          <div class="row align-items-top">
+            <div class="col-lg-12">
+              <div class="card recent-sales overflow-auto">
+                <div class="card-header">
+                    <h5 class="card-title">Recently Added Exams</h5>
+                    <div class="">
+                        <p class="text-secondary">
+                            <small class="muted">Question Category:</small>
+                            <strong>{{ question.category }}</strong>
+                        </p>
+                   </div>
+                </div>
+                <div class="card-body">
+
+                    {% if previous.answers %}
+					<p class="muted"><small>The Previous Question:</small></p>
+					<p>{{ previous.previous_question }}</p>
+
+					{% if previous.previous_outcome %}
+						<div class="alert alert-success">
+					{% else %}
+						<div class="alert alert-warning">
+					{% endif %}
+						<p><small>
+							{% trans "Your answer was" %} </small>
+							<strong>
+							{{ previous.previous_outcome|yesno:"correct,incorrect" }}
+							</strong>
+						</p>
+
+						</div>
+
+						{% include 'correct_answer.html' %}
+
+						<p><strong>{% trans "Explanation" %}:</strong></p>
+						<div class="well " style="background-color: #fcf8e3;">
+						<p>{{ previous.previous_question.explanation }}</p>
+						</div>
+
+						<hr>
+
+					{% endif %}
+
+					<br />
+					{% if question %}
+
+                        <p class="lead">{{ question.content }}</p>
+
+                        {% if question.figure %}
+                            <img src="{{ question.figure.url }}" alt="{{ question.content }}" />
+                        {% endif %}
+
+                        <form action="" method="POST">{% csrf_token %}
+                            <input type=hidden name="question_id" value="{{ question.id }}">
+
+                            <ul class="list-group">
+                                {% for answer in form.answers %}
+                                    <li class="list-group-item">
+                                        {{ answer }}
+                                    </li>
+                                {% endfor %}
+                            </ul>
+
+                            <hr class="my-8">
+                            <div>
+                                <input type="submit" value="Check" class="btn btn-outline-success" >
+                            </div>
+
+                        </form>
+
+					{% endif %}
+                    <br />
+                    <div class="card-footer">
+                        Question {{ progress.0|add:1 }} of {{ progress.1 }}
+                    </div>
+
+                  </div>
+                </div>
+            </div>
+
+          </div>
+        </section>
+
+      </main><!-- End #main -->
+
+      <a href="#" class="back-to-top d-flex align-items-center justify-content-center"><i class="bi bi-arrow-up-short"></i></a>
+
+{% endblock %}
+

@@ -1,0 +1,97 @@
+{% extends base_template %}
+{% load static %}
+
+{% block title %}
+    All Courses | E-Learning Platform
+{% endblock title %}
+
+{% block content %}
+  <main id="main" class="main">
+
+    <div class="pagetitle">
+      <h1>Dashboard</h1>
+      <nav>
+        <ol class="breadcrumb">
+          <li class="breadcrumb-item"><a href="#">Home</a></li>
+          <li class="breadcrumb-item active">Courses</li>
+        </ol>
+      </nav>
+    </div><!-- End Page Title -->
+
+    <section class="section dashboard">
+       <div class="row">
+        <!-- start columns -->
+        <div class="col-lg-12">
+          <div class="row">
+           <!-- Dashboard -->
+              <div class="card recent-sales overflow-auto">
+                <div class="card-body">
+                  <h4 class="card-title">{{ department.department_name }} | {{ department.hod }}</h4>
+                  {% if courses|length == 0 %}
+                    <table class="table table-borderless ">
+                      <tbody>
+                        <tr>
+                          <th>
+                            <div class="alert alert-warning" role="alert">
+                              No courses yet. Contact your Administrator.
+                            </div>
+                          </th>
+                        </tr>
+                      </tbody>
+                    </table>
+
+                  {% else %}
+                    <hr class="my-auto">
+                    <table class="table table-hover table-bordered">
+                      <caption class="caption-top text-center">
+                          <div class="">
+                            {% if user.user_type == 2 %}
+                                Courses - {{ teacher.course.department.department_name }}
+                            {% elif user.user_type == 3 %}
+                                Courses - {{ student.stud_department.department_name }}
+                            {% elif user.user_type == 4 %}
+                                Courses - {{ department.department_name }}
+                            {% endif %}
+                          </div>
+                      </caption>
+                      <thead>
+                        <tr>
+                          <th scope="col">#</th>
+                          <th scope="col">Course Code</th>
+                          <th scope="col">Course Name</th>
+                          <th scope="col">Course Description</th>
+                          <th scope="col">Duration</th>
+                          <th scope="col">Action</th>
+                        </tr>
+                      </thead>
+                      {% for course in courses %}
+                        <tbody>
+                          <tr>
+                            <td>{{ forloop.counter }}</td>
+                            <th scope="row"><a href="#">{{ course.course_code }}</a></th>
+                            <td>{{ course.course_name }}</td>
+
+                            <td>{{ course.course_description }}</td>
+                            <td>{{ course.course_duration }} Years</td>
+                             <td>
+                                <button type="button" class="btn btn-outline-primary btn-sm">
+                                  <a href="{% url 'course_details' course.id %}">View</a>
+                                </button>
+                              </td>
+                            <td><hr></td>
+                          </tr>
+                        </tbody>
+                      {% endfor %}
+                    </table>
+                  {% endif %}
+                </div>
+              </div> <!-- End dashboard -->
+          </div>
+        </div><!-- End  columns -->
+
+      </div><!-- End row -->
+    </section>
+
+  </main><!-- End #main -->
+
+{% endblock %}

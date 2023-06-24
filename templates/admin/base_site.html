@@ -1,0 +1,17 @@
+{% extends 'admin/base_site.html' %}
+{% load static %}
+
+{% block branding %}
+    <img src="{% static '/assets/img/favicon.jpg' %}" alt="logo" class="brand-image img-circle elevation-3" style="opacity: .8" width="50px">
+    {{ block.super }}
+{% endblock %}
+
+{% block nav-global %}
+    <a href="{% url 'messages_inbox' %}" class="nav-link">
+        <i class="nav-icon fas fa-sign-out-alt"></i>
+        <p>
+            Open Messages
+        </p>
+    </a>
+    {{ block.super }}
+{% endblock %}

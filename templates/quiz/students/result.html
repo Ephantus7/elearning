@@ -1,0 +1,161 @@
+{% extends "students/student_base.html" %}
+{% load i18n %}
+{% load static %}
+{% load quiz_tags %}
+
+{% block title %} {{ quiz.title}} {% endblock %}
+{% block description %} Exam Results for {{ quiz.title }} {% endblock %}
+
+
+{% block content %}
+	<main id="main" class="main">
+
+        <div class="pagetitle">
+          <h1>Paper Results</h1>
+          <nav>
+            <ol class="breadcrumb">
+              <li class="breadcrumb-item"><a href="{% url 'dashboard' %}">Home</a></li>
+              <li class="breadcrumb-item">Exams</li>
+              <li class="breadcrumb-item active">Paper Results</li>
+            </ol>
+          </nav>
+        </div><!-- End Page Title -->
+
+        <section class="section">
+          <div class="row align-items-top">
+            <div class="col-lg-12">
+              <div class="card recent-sales overflow-auto">
+                <div class="card-body">
+                  <h5 class="card-title">Paper Results</h5>
+                                      
+                    {% if previous.answers %}
+
+                        <p class="muted"><small>The previous question:</small></p>
+                        <p>{{ previous.previous_question }}</p>
+                        <p>Your answer was
+                        <strong>
+                          {{ previous.previous_outcome|yesno:"correct, incorrect" }}
+                        </strong>
+                        </p>
+                        {% include 'students/correct_answer.html' %}
+                        <p><strong>Explanation:</strong></p>
+                        <div class="well " style="background-color: #fcf8e3;">
+                          <p>{{ previous.previous_question.explanation }}</p>
+                        </div>
+                        <hr>
+
+                    {% endif %}
+
+                    {% if max_score %}
+
+                        <div>
+                        <h2>Exam results</h2>
+                        <p>
+                          <small class="muted">Exam title: </small>
+                          <strong>{{ quiz.title }}</strong></p>
+
+                        <p class="lead">
+                            You answered <b>{{ score }}</b> questions correctly out of <b>{{ max_score }}</b>,
+                            giving you <strong>{{ percent }}</strong> percent correct
+                        </p>
+
+                        {% if quiz.pass_mark %}
+                            {% if percent >= quiz.pass_mark %}
+                                <hr class="soften">
+                                <div class="progress mt-3">
+                                    <div class="progress-bar progress-bar-striped bg-success progress-bar-animated"
+                                         role="progressbar" style="width: {{ percent }}%" aria-valuenow="{{ score }}" aria-valuemin="0"
+                                         aria-valuemax="100">
+
+                                    </div>
+                                    </div>
+                                <span class="text-success">{{ sitting.result_message }}</span>
+
+                                <hr class="soften">
+                            {% else %}
+                                <hr class="soften">
+
+                                <div class="progress mt-3">
+                                  <div class="progress-bar progress-bar-striped bg-danger progress-bar-animated"
+                                       role="progressbar" style="width: {{ percent }}%" aria-valuenow="{{ score }}" aria-valuemin="0"
+                                       aria-valuemax="100">
+
+                                  </div>
+                                </div>
+
+                                <span class="text-danger">{{ sitting.result_message }}</span>
+
+                                <hr class="soften">
+                            {% endif %}
+
+                        {% endif %}
+
+                    <p>Review the questions below and try the exam again in the future</p>
+
+                    {% if user.is_authenticated %}
+
+                      <p>The result of this exam will be stored in your progress section</p>
+
+                    {% endif %}
+
+                    </div>
+
+
+                    {% endif %}
+
+                    <hr>
+
+                    {% if possible %}
+
+                    <p class="lead">
+                        Your session score is {{ session }} out of a possible {{ possible }}
+                    </p>
+
+                    <hr>
+
+                    {% endif %}
+
+                    {% if questions %}
+
+                      {% for question in questions %}
+
+                        <p class="lead">
+                            {{ question.content }}
+                        </p>
+
+                      {% correct_answer_for_all question %}
+
+                        {% if question.user_answer %}
+                            <p>Your answer: {{ question|answer_choice_to_string:question.user_answer }}</p>
+                        {% endif %}
+
+                      <p><strong>Explanation:</strong></p>
+                      <div>
+                          <div class="text-success">
+                            {{ question.explanation|safe }}
+                          </div>
+                      </div>
+
+                      <hr>
+
+                    {% endfor %}
+
+                    {% endif %}
+
+
+                  </div>
+
+                </div>
+                      
+            </div>
+
+          </div>
+        </section>
+
+      </main><!-- End #main -->
+
+      <a href="#" class="back-to-top d-flex align-items-center justify-content-center"><i class="bi bi-arrow-up-short"></i></a>
+
+{% endblock %}
+
+

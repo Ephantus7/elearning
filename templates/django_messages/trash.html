@@ -1,0 +1,72 @@
+{% extends 'django_messages/base.html' %}
+
+{% load i18n %}
+
+{% block content %}
+<main id="main" class="main">
+
+    <div class="pagetitle">
+      <h1>Trash</h1>
+      <nav>
+        <ol class="breadcrumb">
+          <li class="breadcrumb-item"><a href="{% url 'profile' %}">Home</a></li>
+          <li class="breadcrumb-item active">Trash</li>
+        </ol>
+      </nav>
+    </div><!-- End Page Title -->
+
+    <section class="section">
+      <div class="row align-items-top">
+        <div class="col-lg-12">  
+          {% if messages %}
+            {% for message in messages %}
+              <div class="alert alert-{{ message.tags }} alert-dismissible fade show" role="alert">
+                {{ message }}
+                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+              </div>
+            {% endfor %}
+          {% endif %}
+
+          {% if message_list|length == 0 %}
+            <div class="col-lg-12">
+              <div class="alert alert-warning" role="alert">
+                No messages available.
+              </div>
+            </div>
+          {% endif %}  
+
+          {% if message_list %}  
+
+          {% for message in message_list  %}
+
+          <div class="col-lg-12">
+
+            <div class="card">
+              <div class="card-body">
+                <h5 class="card-title">
+                  Subject: {{ message.subject }}
+                </h5>
+                <h6 class="card-subtitle mb-2 text-muted">
+                  <strong>Sent at: </strong>{{ message.sent_at|date:_("DATETIME_FORMAT") }}
+                </h6>
+                <h6 class="card-subtitle mb-2 text-muted">
+                    <a href="{% url 'messages_undelete' message.id %}">
+                        <span class="badge rounded-pill bg-primary p-2 ms-2">Undelete</span>
+                    </a>
+                </h6>
+              </div>
+            </div><!-- End Card with titles, buttons, and links -->
+  
+          </div>
+          
+          {% endfor %}
+
+          {% endif %}
+
+          
+        </div>
+      </div>
+    </section>
+
+  </main><!-- End #main -->
+{% endblock %}

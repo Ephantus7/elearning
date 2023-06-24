@@ -1,0 +1,155 @@
+{% extends 'students/student_base.html' %}
+{% load static %}
+{% load tz %}
+
+{% block title %}
+    Assignments | E-Learning Platform
+{% endblock title %}
+
+{% block content %}
+      <main id="main" class="main">
+
+        <div class="pagetitle">
+          <h1>Assignments</h1>
+          <nav>
+            <ol class="breadcrumb">
+              <li class="breadcrumb-item"><a href="{% url 'student_home' %}">Home</a></li>
+              <li class="breadcrumb-item active">Assignments</li>
+            </ol>
+          </nav>
+        </div><!-- End Page Title -->
+
+        <section class="section">
+          <div class="row align-items-top">
+            <div class="col-lg-12">
+                {% if messages %}
+                  {% for message in messages %}
+                      <div class="alert alert-{{ message.tags }} alert-dismissible fade show" role="alert">
+                        {{ message }}
+                        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                      </div>
+                  {% endfor %}
+                {% endif %}
+                {% for assignment in assignments %}
+                  {% empty %}
+                    <div class="col-lg-12">
+                      <div class="alert alert-danger" role="alert">
+                        No assignments available. Please check back later.
+                      </div>
+                    </div>
+                  {% endfor %}
+                {% for assignment in assignments %}
+                     <div class="card">
+                        <div class="card-body">
+                          <h4 class="card-title">
+                              {{ assignment.assignment_name }} | {{ assignment.subject }} |
+                              {{ assignment.course|truncatechars:40 }}
+                          </h4>
+
+                            <p class="card-text"><em>Created by: <b>{{ assignment.created_by }}</b></em></p>
+
+                          <p class="card-text">
+                              {{ assignment.description|truncatechars:70 }}
+                          </p>
+                          <!-- Assignment Modal Dialog Scrollable -->
+                          <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#fullscreenModal">
+                            View Assignment
+                          </button>
+                          <div class="modal fade" id="fullscreenModal" tabindex="-1">
+                            <div class="modal-dialog modal-fullscreen">
+                              <div class="modal-content">
+                                <div class="modal-header">
+                                  <h3 class="card-title">{{ assignment.assignment_name }}</h3>
+                                  <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                </div>
+                                <div class="modal-body">
+                                    <h5 class="card-title" align="center">{{ assignment.topic }}</h5>
+                                    <h6><small>Assignment created by: {{ assignment.created_by }}</small></h6>
+
+                                    <div class="card-group">
+                                        <div class="row col-lg-12">
+
+                                            <p class="card-text"><em><b>Guidelines: </b></em></p>
+                                            {% if assignment.guideline1|length != 0 %}
+                                                <p><b>1. {{ assignment.guideline1 }}</b></p>
+                                            {% endif %}
+                                            {% if assignment.guideline2|length != 0 %}
+                                                <p><b>2. {{ assignment.guideline2 }}</b></p>
+                                            {% endif %}
+                                            {% if assignment.guideline3|length != 0 %}
+                                                <p><b>3. {{ assignment.guideline3 }}</b></p>
+                                            {% endif %}
+                                            {% if assignment.guideline4|length != 0 %}
+                                                <p><b>4. {{ assignment.guideline4 }}</b></p>
+                                            {% endif %}
+                                            {% if assignment.guideline5|length != 0 %}
+                                                <p><b>5. {{ assignment.guideline5 }}</b></p>
+                                            {% endif %}
+
+                                        </div>
+                                    </div>
+                                    <p>{{ assignment.description }}</p>
+                                    <h5><b>To be submitted by: </b></h5>
+
+                                    {% if tz.now|timeuntil:assignment.deadline > 10 %}
+                                        <div class="alert alert-danger alert-dismissible fade show" role="alert">
+                                            {{ assignment.deadline }}
+                                        </div>
+
+                                    {% else %}
+                                        <div class="alert alert-primary alert-dismissible fade show" role="alert">
+                                            {{ assignment.deadline }}
+                                        </div>
+                                    {% endif %}
+
+                                </div>
+                                <div class="modal-footer">
+                                  <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
+                                      Close
+                                  </button>
+                                  <p class="card-text">
+                                      <a href="{{ assignment.assignment_file.url }}" class="btn btn-primary" download>
+                                          Download Assignment File
+                                      </a>
+                                  </p>
+                                  <div class="card-footer">
+                                      <div class="col-sm-10">
+                                          <form method="post" enctype="multipart/form-data">
+                                              {% csrf_token %}
+                                              <span>
+                                                  {{ form.finished_assignment_file }}
+                                                  {% if form.finished_assignment_file.errors %}
+                                                      {% for error in form.finished_assignment_file.errors %}
+                                                          <p style="color: red">{{ error }}</p>
+                                                      {% endfor %}
+                                                  {% endif %}
+                                              </span>
+                                              <input type="hidden" name="assignment_id" value="{{ assignment.id }}">
+                                              <input type="hidden" name="student_id" value="{{ student.id }}">
+                                              <input type="hidden" name="upload_id" value="{{ upload.id }}">
+
+                                              <span>
+                                                  <button type="submit" class="btn btn-primary">
+                                                      Submit Assignment
+                                                  </button>
+                                              </span>
+                                          </form>
+                                      </div>
+                                  </div>
+
+                                </div>
+                              </div>
+                            </div>
+                          </div><!-- End Assignment Modal Dialog Scrollable-->
+
+                        </div>
+                    </div>
+                {% endfor %}
+            </div>
+          </div>
+        </section>
+
+      </main><!-- End #main -->
+
+      <a href="#" class="back-to-top d-flex align-items-center justify-content-center"><i class="bi bi-arrow-up-short"></i></a>
+{% endblock %}

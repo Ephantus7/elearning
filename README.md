@@ -6,7 +6,7 @@ A simple E-Learning platform based on the Django web framework.
 2. Ensure you have Python 3.11 or higher installed
 3. Run `python -m venv env` to create a virtual environment
 4. Run `source env/bin/activate` to activate the virtual environment (Linux/MacOS) or `env\Scripts\activate` (Windows)
-5. Run `python -m pip install -r requirements.txt` install the required packages from requirements.txt
+5. Run `python -m pip install -r requirements.txt` to install the required packages from requirements.txt
 6. Create a `.env` file (as shown in the `.env.sample` file) in the root directory of the project and add the following variables as per 
 your database configuration (PostgreSQL is used in this project):
 
@@ -18,6 +18,12 @@ your database configuration (PostgreSQL is used in this project):
         DB_HOST=your database host
         DB_PORT=your database port
     ```
+   Note: The `SECRET_KEY` variable is used by Django to provide cryptographic signing, and should be kept secret. 
+   
+   Run `python -c 'from django.core.management.utils import get_random_secret_key; print(get_random_secret_key())'`
+   in a terminal to generate a new secret key.
+
+
 7. Run `python manage.py makemigrations`
 8. Run `python manage.py migrate`
 9. Run `python manage.py runserver`

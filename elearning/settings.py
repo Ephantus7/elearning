@@ -20,7 +20,6 @@ load_dotenv()
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
 
-
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/4.1/howto/deployment/checklist/
 
@@ -28,12 +27,9 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 SECRET_KEY = os.environ.get("SECRET_KEY")
 
 # SECURITY WARNING: don't run with debug turned on in production!
+ALLOWED_HOSTS = [os.environ['WEBSITE_HOSTNAME']] if 'WEBSITE_HOSTNAME' in os.environ else []
+CSRF_TRUSTED_ORIGINS = ['https://' + os.environ['WEBSITE_HOSTNAME']] if 'WEBSITE_HOSTNAME' in os.environ else []
 DEBUG = False
-
-ALLOWED_HOSTS = [
-    '127.0.0.1',
-]
-
 
 # Application definition
 
@@ -73,9 +69,9 @@ MIDDLEWARE = [
 ROOT_URLCONF = 'elearning.urls'
 
 AUTHENTICATION_BACKENDS = [
-   'axes.backends.AxesBackend', 
-   'django.contrib.auth.backends.ModelBackend',
-   'allauth.account.auth_backends.AuthenticationBackend',
+    'axes.backends.AxesBackend',
+    'django.contrib.auth.backends.ModelBackend',
+    'allauth.account.auth_backends.AuthenticationBackend',
 ]
 
 TEMPLATES = [
@@ -97,7 +93,6 @@ TEMPLATES = [
 
 WSGI_APPLICATION = 'elearning.wsgi.application'
 
-
 # Database
 # https://docs.djangoproject.com/en/4.1/ref/settings/#databases
 
@@ -111,7 +106,6 @@ DATABASES = {
         'PORT': os.environ.get("PORT"),
     }
 }
-
 
 # Password validation
 # https://docs.djangoproject.com/en/4.1/ref/settings/#auth-password-validators
@@ -131,7 +125,6 @@ AUTH_PASSWORD_VALIDATORS = [
     },
 ]
 
-
 # Internationalization
 # https://docs.djangoproject.com/en/4.1/topics/i18n/
 
@@ -142,7 +135,6 @@ TIME_ZONE = 'Africa/Nairobi'
 USE_I18N = True
 
 USE_TZ = False
-
 
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/4.1/howto/static-files/
@@ -157,7 +149,6 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 # custom user model
 AUTH_USER_MODEL = 'elearning_app.CustomUser'
-
 
 # media urls
 MEDIA_URL = 'media/'
@@ -175,11 +166,11 @@ AXES_RESET_ON_SUCCESS = True
 FORM_RENDERER = 'django.forms.renderers.DjangoTemplates'
 
 # allauth
-ACCOUNT_EMAIL_REQUIRED=True
+ACCOUNT_EMAIL_REQUIRED = True
 ACCOUNT_AUTHENTICATION_METHOD = ("username_email")
 
 # custom message tags
 MESSAGE_TAGS = {
-    messages.SUCCESS : 'alert alert-success alert-dismissible',
+    messages.SUCCESS: 'alert alert-success alert-dismissible',
     messages.ERROR: 'alert alert-danger alert-dismissible',
 }

@@ -134,7 +134,7 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 AUTH_USER_MODEL = 'elearning_app.CustomUser'
 
 # azure storage setitngs
-DEFAULT_FILE_STORAGE = 'core.azure_storage.AzureMediaStorage'
+DEFAULT_FILE_STORAGE = 'elearning.azure_storage.AzureMediaStorage'
 
 AZURE_ACCOUNT_NAME = os.getenv('AZURE_ACCOUNT_NAME')
 AZURE_ACCOUNT_KEY = os.getenv('AZURE_ACCOUNT_KEY')

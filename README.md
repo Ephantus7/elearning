@@ -50,7 +50,9 @@ your database configuration (PostgreSQL is used in this project):
 ### Users
 - Send each other messages using django-messages
 
-
+## Deployment to Azure App Service
+- For production, the platform can can be deployed using Azure App Service.
+- Follow guidelines on how to set up app service, a postgresql database as well as an Azure storage accounts, then pass them as environment variables.
 
 
 

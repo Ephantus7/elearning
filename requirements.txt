@@ -37,3 +37,6 @@ django-embed-video==1.4.8
 django-model-utils==4.3.1
 python-dotenv==1.0.0
 whitenoise==6.5.0
+django-storages==1.13.2
+azure-core==1.26.3
+azure-storage-blob==12.14.1

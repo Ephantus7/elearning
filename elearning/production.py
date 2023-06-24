@@ -133,8 +133,15 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 # custom user model
 AUTH_USER_MODEL = 'elearning_app.CustomUser'
 
+# azure storage setitngs
+DEFAULT_FILE_STORAGE = 'core.azure_storage.AzureMediaStorage'
+
+AZURE_ACCOUNT_NAME = os.getenv('AZURE_ACCOUNT_NAME')
+AZURE_ACCOUNT_KEY = os.getenv('AZURE_ACCOUNT_KEY')
+AZURE_CUSTOM_DOMAIN = f'{AZURE_ACCOUNT_NAME}.blob.core.windows.net'
+
 # media urls
-MEDIA_URL = 'media/'
+MEDIA_URL = 'https://' + os.environ['AZURE_STORAGE_ACCOUNT'] + '.blob.core.windows.net/media/'
 MEDIA_ROOT = BASE_DIR / 'media'
 
 # login/logout urls
